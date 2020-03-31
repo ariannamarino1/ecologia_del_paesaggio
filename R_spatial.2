@@ -1,0 +1,37 @@
+#richiamiamo la libreria "sp"
+library(sp)
+
+data(meuse)
+head(meuse)
+
+#coordinate del dataset
+coordinates(meuse)=~x+y
+
+#spplot dei dati dello zinco
+spplot(meuse,"zinc")
+
+#exercize: spplot dei dati di rame
+head(meuse)
+names(meuse) #un'altra possibilità per vedere i nomi delle colonne
+spplot(meuse,"copper")
+
+#bubble
+bubble(meuse,"zinc")
+
+#exercize: bubble del rame, colorato di rosso
+bubble(meuse,"copper",col="red")
+
+#foraminiferi, carbon capture
+#array
+foram<-c(10,20,35,55,67,80)
+carbon<-c(5,10,30,70,85,99)
+plot(foram,carbon,col="green",cex=2,pch=19)
+
+#Dati dall'esterno sul covid-19
+#creare una cartella: C:/lab
+setwd("C:/lab")
+
+#per leggere la tabella
+covid<-read.table("covid_agg.csv",head=TRUE)
+
+
