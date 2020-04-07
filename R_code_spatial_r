@@ -1,4 +1,4 @@
-# R spatial: oggi facciamo funzioni spaziali in Ecologia del paesaggio
+# R spatial: funzioni spaziali in Ecologia del paesaggio
 library(sp)
 # richiamo il pacchetto "sp"
 data("meuse")
@@ -15,6 +15,7 @@ plot(cadmium,lead,col="blue",pch=19,cex=2)
 #exercise: plot del rame e zinco (copper e zinc) con carattere triangolo e colore verde
 plot(copper,zinc,pch=17,col="green",cex=2)
 plot(cadmium,lead,col="blue",pch=19,cex=2)
+
 #cambiare le etichette
 plot(copper,zinc,pch=17,col="green",cex=2,xlab="Rame",ylab="Zinco")
 
