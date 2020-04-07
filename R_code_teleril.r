@@ -1,18 +1,15 @@
-setwd("~/lab")
+#Codice R per analisi di immagini satellitari
 
-# setwd("C:/lab/)
+# packages: raster
 
-install.packages("raster") install.packages("rgdal") 
-install.packages("ggplot2")
-install.packages("RStoolbox")
+install.packages("raster") 
 
 library(raster)
-library(rgdal)
-library(ggplot2)
-library(RStoolbox)
 
-
-p224r63_2011m <- brick("p224r63_2011_masked.grd")
+setwd("C:/Users/asus/Desktop/Lezioni/Ecologia del paesaggio/p224r63")
+ 
+p224r63_2011<- brick("p224r63_2011_masked.grd")
+plot(p224r63_2011)
 
 p224r63_1988m <- brick("p224r63_1988_masked.grd")
 
