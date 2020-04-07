@@ -51,3 +51,42 @@ d<-density(covids)
 
 plot(d)
 points(covids) 
+
+plot(d)
+#palette
+cl<-colorRampPalette(c("yellow","orange","red"))(100)
+plot(d,col=cl)
+
+#EXERCISE: plot della mapa della densità dal verde al blu
+
+points(covids)
+
+library(rgdal)
+
+coastlines<-readOGR("ne_10m_coastline.shp")
+plot(coastlines,add=T)
+
+#EXERCISE: plot della mappa di densità con una nuova colorazione e aggiunta delle coastlines
+cl1<-colorRampPalette(c("blue","light blue","light green","yellow"))(100)
+plot(d,col=cl1)
+plot(coastlines,add=T,col="yellow")
+
+cl2<-colorRampPalette(c("red","orange","yellow","green","blue"))(800)
+plot(d,col=cl2)
+plot(coastlines,add=T)
+
+cl3<-colorRampPalette(c("green","violet","blue"))(200)
+plot(d,col=cl3)
+plot(coastlines,add=T)
+
+cl4<-colorRampPalette(c("violet","yellow","green"))(100)
+plot(d,col=cl4)
+plot(coastlines,add=T)
+
+cl5<-colorRampPalette(c("darkcyan","purple","red"))(200)
+plot(d,col=cl5)
+plot(coastlines,add=T)
+
+cl6<-colorRampPalette(c("white","blue","green","red","orange","yellow"))(150)
+plot(d,col=cl7)
+plot(coastlines,add=T)
