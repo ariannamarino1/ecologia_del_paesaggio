@@ -76,3 +76,12 @@ hist(dvi1988, col=rgb(1,0,0,0.5),main="DVI frequencies")
 hist(dvi2011, col=rgb(0,0,1,0.5), add=T)
 box()
 legend("topleft", c("DVI 1988", "DVI 2011"), fill=c("red", "blue"))
+
+
+summary(p224r63_2011) 
+cl <- colorRampPalette(c('dark blue','blue','light blue'))(100) # 
+names(p224r63_2011) 
+plot(p224r63_2011$B1_sre, col=cl)
+cl <- colorRampPalette(c('red','orange','yellow'))(100) # 
+plot(p224r63_2011$B4_sre, col=cl)
+q()
