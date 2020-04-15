@@ -15,10 +15,10 @@ head(meuse)
 names(meuse)
 
 #con summary si visualizzano i principali indici statistici dei dati in considerazione
-summary(mause)
+summary(meuse)
 
 #creazione di un grafico 
-paris(mouse)
+pairs(meuse)
 
 #
 pairs(~ cadmium + copper + lead , data = meuse)
