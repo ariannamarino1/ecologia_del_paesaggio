@@ -1,37 +1,46 @@
+#SPATIAL 2
+
 #richiamiamo la libreria "sp"
 library(sp)
 
+#carico i dati
 data(meuse)
+
+#mostriamo le prime sei righe
 head(meuse)
 
-#coordinate del dataset
+#fissare il dataframe in uso 
+attach(meuse)
+
+#specidficazione delle coordinate del dataset
 coordinates(meuse)=~x+y
 
-#spplot dei dati dello zinco
+#creare un grafico sp plot con i dati dello zinco
 spplot(meuse,"zinc")
 
-#exercize: spplot dei dati di rame
+#exercize: sp plot dei dati di rame
 head(meuse)
 names(meuse) #un'altra possibilità per vedere i nomi delle colonne
 spplot(meuse,"copper")
 
-#bubble
+#il comando bubble varia il grafico
 bubble(meuse,"zinc")
 
-#exercize: bubble del rame, colorato di rosso
-bubble(meuse,"copper",col="red")
+#exercize: grafico bubble del rame, evidenziandolo colorandolo di rosso
+bubble(meuse,"copper",col="red",main="Indice spaziale Rame")
 
-#foraminiferi, carbon capture
-#array
+
+#creare nuovo oggetto con nuovi dati rappresentanti foraminiferi e carbon capture
 foram<-c(10,20,35,55,67,80)
 carbon<-c(5,10,30,70,85,99)
+
+#li mettiamo in un grafico
 plot(foram,carbon,col="green",cex=2,pch=19)
 
-#Dati dall'esterno sul covid-19
-#creare una cartella: C:/lab
+#Analizziamo dei dati provenienti dall'esterno sul covid-19
 setwd("C:/lab")
 
-#per leggere la tabella
+#per leggere la tabella considerando che la prima riga è di testo
 covid<-read.table("covid_agg.csv",head=TRUE)
 
 
