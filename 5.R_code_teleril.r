@@ -48,7 +48,7 @@ plot(p224r63_2011$B1_sre,col=clb)
 
 #visualizzare solo la banda verde nel grafico
 clg <- colorRampPalette(c("dark green","green","light green"))(100)
-plot(p224r63_2011$B2_sre,col=colg)
+plot(p224r63_2011$B2_sre,col=clg)
 
 #exercise: fai infrarosso vicino con la scala cromatica da rosso a giallo 
 clir <- colorRampPalette(c("purple","pink","light pink"))(100)
