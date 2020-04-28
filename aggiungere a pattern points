@@ -1,0 +1,67 @@
+# selezionare la WD
+setwd("C:/lab")
+
+# caricare il file RData
+load("sanmarino.RData")
+
+# visualiziamo i dati 
+ls()
+
+# dT è la density map
+# Tesi è un dataset che si trovava all'interno di "Tesi.RData"
+# Tesippp è il point pattern, coordinate della tabella originale 
+# a partire da Tesippp siamo riusciti a fare la dT, mappa di densità
+
+# caricare la libreria
+library(spatstat)
+# visualizziamo la densità di campionamento
+points(Tesippp, col="green")
+ 
+head(Tesi)
+
+# questa funzione associa i valori della variabile che vogliamo interpolare al point pattern (punti spaziali)
+marks(Tesippp)<-Tesi$Species_richness
+# ricordare che $ indica la colonna del dataset da considerare
+
+#possiamo procedere con l'interpolazione, la stima. Creare una mappa continua partendo da valori discreti
+
+#Smooth funzione che stima i valori dove questi non sono stati misurati
+interpol<-Smooth(Tesippp)
+
+# rappresentare con la mappa
+plot(interpol)
+points(Tesippp,col="blue")
+# maggiore richchezza nella parte Sud-Est e nella parte centrale
+
+
+setwd("C:/lab")
+# libreria per utilizzare qualsiasi tipo di file vettoriale
+library(rgdal)
+# possiamo leggere il file .shp
+sanmarino<-readOGR("San_Marino.shp")
+# e ora plottarlo
+plot(sanmarino) #visualizziamo il territorio di San Marino
+plot(interpol,add=T) #add=T sovrappone la mappa dell'interpolazione alla mappa di San Marino
+points(Tesippp,add=T) #sovrappone i punti alle mappe di prima
+plot(sanmarino,add=T) #per far vedere di nuovo i confini di San Marino
+
+
+## Exercise: plot multiframe di densità e interpolazione
+par(mfrow=c(2,1))
+
+plot(dT,main="Density of points")
+points(Tesippp,col="blue")
+
+plot(interpol,main="Estimate of species richness")
+points(Tesippp,col="blue")
+
+# esercizio: due colonne e una riga
+par(mfrow=c(1,2))
+
+plot(dT,main="Density of points")
+points(Tesippp,col="blue")
+
+plot(interpol,main="Estimate of species richness")
+points(Tesippp,col="blue")
+
+
