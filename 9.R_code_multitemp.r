@@ -112,7 +112,48 @@ after<-c(47.8,52.2)
 output <- data.frame(cover,before,after)
 View(output)
 
-# richiamimao la libreria ggplot2
 
+#### DAY 2 ###
+# riapriamo il file dell'utlima lezione
+setwd("C:/lab")
+load("multitemp.RData")
+ls()
+
+# rivediamo le immagini a confronto della foresta prima e dopo il disboscamento
+library(raster)
+par(mfrow=c(2,1))
+plot(d1c$map,col=cl1)
+plot(d2c$map,col=cl2)
+dev.off()
+
+# controliamo il dataframe contenete l'agricultura e la foresta prima e dopo il disboscamento
+output
+
+
+# possiamo quindi fare un plot della percentuale di foresta attuale e precedente
+
+# plot della percentuale precedente
+# carichiamo la libreria ggplot2
+library(ggplot2)
+grafico1<-ggplot(output,aes(x=cover,y=before,color=cover))+geom_bar(stat="identity",fill="white")
+grafico1
+# faremo degli istogrammi del dataframe di output
+# aes: sulla x agricoltura e foresta, sulla y la percentuale di copertura prima della deforestazione
+# colore si baserà sulla cover (agricoltura e foresta)
+# stat sono le statistiche che considera, in questo caso le identità
+# fill dà il colore alla copertura
+
+## Exercize: plot the histograms of the land cover after deforestation
+grafico22<-ggplot(output,aes(x=cover,y=after,color=cover))+geom_bar(stat="identity",fill="white")
+grafico2
+
+# possiamo fare un plot dei due istogrammi per confrontarli
+# dobbiamo però usare un'altra libreria, la gridExtra 
+install.packages("gridExtra")
+library(gridExtra)
+
+# possiamo quindi procedere a fare un plot con la funzione grid.arrange. La funzione prende vari plot e li mette insieme all'interno di uno stesso grafico (funzione simile a par)
+grid.arrange(grafico1,grafico2,nrow=1)
+# la percentuale di agricoltura relativa a prima della deforestazione sale vertiginosamente fino a raggiungere quasi il livello della foresta dopo la deforestazione
 
 
