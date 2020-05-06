@@ -30,7 +30,7 @@ cl<-colorRampPalette(c('red','orange','yellow'))(100)
 plot(EN01,col=cl)
 plot(EN13,col=cl)
 
-par(mfrow=c(1,2)
+par(mfrow=c(1,2))
 plot(EN01,col=cl)
 plot(EN13,col=cl)
 dev.off()
@@ -56,3 +56,25 @@ plot(EN11,col=cl)
 plot(EN12,col=cl)
 plot(EN13,col=cl)
 
+dev.off()
+
+    
+    
+ibrary(raster)
+
+setwd("~/lab/esa_no2")
+# put all files into the folder
+
+rlist<-list.files(pattern=".png", full.names=T)
+
+#save raster into list
+#con lapply
+
+list_rast<-lapply(rlist, raster)
+
+#con ciclo for
+list_rast<-list()
+for(i in 1:length(rlist)){
+  r=raster(rlist[[i]])
+  list_rast[[i]]=r
+}    
