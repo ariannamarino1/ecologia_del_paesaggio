@@ -58,23 +58,35 @@ plot(EN13,col=cl)
 
 dev.off()
 
-    
-    
-ibrary(raster)
 
-setwd("~/lab/esa_no2")
-# put all files into the folder
+### DAY 2 ###
 
-rlist<-list.files(pattern=".png", full.names=T)
+setwd("C:/lab")
+load("EN.RData")
+ls()
+
+# per importare più immagini insieme
+library(raster)
+# bisogna creare una cartella contenente tutti le immagini EN e selezionare questa cartella come nuova WD
+setwd("C:/lab/esa_no2")
+
+# creiamo una rlist contenente la lista di file .png
+rlist<-list.files(pattern=".png")
+rlist #visualiziamo il contenuto del nuovo data creato
 
 #save raster into list
-#con lapply
+# lapply applica una funzione su una lista o un vettore (serie di elementi). 
+# In questo caso la funzione che vogliamo applicare per caricare i singoli dati sono brick (immagine satellitare con tutti i sensori) e raster (immagine con un solo sensore)
+# applichiamo alla listra rlis la funzione raster
+listafinale<-lapply(rlist, raster)
 
-list_rast<-lapply(rlist, raster)
+listafinale 
+# visualizziamo i RasterLayer 
 
-#con ciclo for
-list_rast<-list()
-for(i in 1:length(rlist)){
-  r=raster(rlist[[i]])
-  list_rast[[i]]=r
-}    
+# funzione stack permette di impacchettare tutte le immagini in una unica
+EN <- stack(listafinale)
+
+cl<-colorRampPalette(c('red','orange','yellow'))(100)
+# possiamo dunque plottare l'immagine
+plot(EN,col=cl)
+
