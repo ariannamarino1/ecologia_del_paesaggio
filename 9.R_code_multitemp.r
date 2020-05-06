@@ -156,4 +156,8 @@ library(gridExtra)
 grid.arrange(grafico1,grafico2,nrow=1)
 # la percentuale di agricoltura relativa a prima della deforestazione sale vertiginosamente fino a raggiungere quasi il livello della foresta dopo la deforestazione
 
+# mettiamo la scala dell'asse delle y da 0 a 100 così i due grafici possono essere confrontati meglio
+grafico1<-ggplot(output,aes(x=cover,y=before,color=cover))+geom_bar(stat="identity",fill="white")+ylim(0,100)
+grafico22<-ggplot(output,aes(x=cover,y=after,color=cover))+geom_bar(stat="identity",fill="white")+ylim(0,100)
+grid.arrange(grafico1,grafico2,nrow=1)
 
