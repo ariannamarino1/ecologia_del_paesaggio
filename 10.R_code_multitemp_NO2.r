@@ -90,3 +90,32 @@ cl<-colorRampPalette(c('red','orange','yellow'))(100)
 # possiamo dunque plottare l'immagine
 plot(EN,col=cl)
 
+
+####
+
+library(raster)
+setwd("C:/lab/esa_no2")
+
+rlist
+listafinale<-lapply(rlist,raster)
+listafinale
+EN<-stack(listafinale)
+
+# una volta caricate le immagini creiamo una differenza tra l'ultima immagine (EN 13 corrispondente a Marzo) e la prima immagine (EN 01 corrispondente a Gennaio) 
+difEN<- EN$EN_0013-EN$EN_0001
+
+# ci definizamo una colorRampPalette
+cld<-colorRampPalette(c('blue','white','red'))(100)
+
+# e plottiamo la differnza delle immagini con il colore creato così da visualizzare le differenze tra Marzo e Gennaio
+plot(difEN,col=cld)
+
+# boxplot
+boxplot(EN,horizontal=T,outiline=F,axes=T)
+# horizontal=T -> disposizione orizzontale
+# outline=F -> senza linee esterne
+# axes=T di defoult, mette gli assi (il contrario axes=F li toglie)
+
+
+
+
