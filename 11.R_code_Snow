@@ -1,0 +1,54 @@
+# settimao la WD
+setwd("C:/lab")
+
+# istalliamo la libreria 
+install.packages("ncdf4")
+#richiamiamo la libreria appena istallata e la libreria raster
+library(ncdf4)
+library(raster)
+
+#importiamo con la funzione raster l'immagine scaricata da Copernicus
+snowmay<-raster("c_gls_SCE500_202005180000_CEURO_MODIS_V1.0.1.nc")
+
+#visualizziamo dunque l'immagne ed essendo neve possiamo fare una ColorRampPalette 
+cl <- colorRampPalette(c('darkblue','blue','light blue'))(100) 
+#e plottiamo l'immagine con il colore 
+plot(snowmay,col=cl)
+
+#settiamo la nuova WD che è la cartella snow
+setwd("C:/lab/snow")
+
+#importiamo tutti i file
+librari(raster)
+rlist=list.files(pattern="snow")
+#usiamo lapply
+list_rast=lapply(rlist,raster)
+snow.multitemp<-stack(list_rast)
+#plottiamo le immagini
+cl <- colorRampPalette(c('darkblue','blue','light blue'))(100) 
+plot(snow.multitemp, col=cl)
+
+par(mfrowc=(1,2)
+plot(snow.multitemp$snow2000r,col=cl)
+plot(snow.multitemp$snow2020r,col=cl)
+
+#mettiamo il limite delle assi delle y uguali per entrambe le mappe
+par(mfrow=c(1,2))
+plot(snow.multitemp$snow2000r, col=cl, zlim=c(0,250))
+plot(snow.multitemp$snow2020r, col=cl, zlim=c(0,250))
+
+dev.off()
+
+# vediamo la differenza tra le due mappe
+diffsnow=snow.multitemp$snow2020r - snow.multitemp$snow2000r
+#nuova colorramppalette
+cldiff<-colorRampPalette(c('blue','white','red'))(100)
+plot(diffsnow,col=cldiff)
+
+#funzione source ci permette di girare un codice dall'esterno
+source("prediction.r")
+
+predicted.snow.2025.norm <- raster("predicted.snow.2025.norm.tif")
+plot(predicted.snow.2025.norm,col=cl) 
+
+
