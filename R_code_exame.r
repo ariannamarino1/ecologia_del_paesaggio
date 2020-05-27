@@ -371,11 +371,141 @@ cl6<-colorRampPalette(c("white","blue","green","red","orange","yellow"))(150)
 plot(d,col=cl7)
 plot(coastlines,add=T)
 
+
+# INTERPOLATION
+
+
+#exercise: usiamo il vecchio sript sul covid e andiamo a plottare la mappa di densità;
+#carichiamo il vecchio script "Lezione spatial"
+setwd("C:/lab")
+point_pattern <- read.table("C:/lab/point_pattern.RData", quote="\"")
+ls()
+covid <- read.table("covid_agg.csv",header = T)
+attach(covid)
+
+cl5 <- colorRampPalette(c('cyan', 'purple', 'red')) (200) 
+plot(d, col=cl5, main="density")
+points(covids)
+
+library(spatstat)
+covids <- ppp(lon,lat,c(-180,180),c(-90,90))
+d <- density(covids)
+plot(d)
+
+library(rgdal)
+coastlines <- readOGR("ne_10m_coastline.shp")
+plot(coastlines,add=T)
+
+###interpolazione
+
+covid
+#creiamo dei valori per interpolazione in base ad etichette per ogni paese
+
+#usiamo il point pattern di ppp, e associamo alla colonna cases del dataset covid
+#se fai attach non si deve scrivere covid$cases ma solo cases
+marks(covids) <- cases
+
+#creiamo la mappa con la funzione smooth
+s <- Smooth(covids)
+
+# Exercise: plot(s) with points and coastlines
+
+plot(s,col=cl1,main="Covid cases estimate")
+cl1 <- colorRampPalette(c('purple', 'pink', 'light pink')) (200) 
+
+points(covids)
+
+setwd("C:/lab/coastlines")
+library(rgdal)
+coastlines <- readOGR("ne_10m_coastline.shp")
+plot(coastlines,add=T)
+
+#stima non della densità di punti ma di casi nel mondo;
+
+dev.off()
+
+#mappa finale, unico fragico con entrambi i plot
+
+par(mfrow=c(2,1))
+
+#densità 
+library(spatstat)
+covids <- ppp(lon,lat,c(-180,180),c(-90,90))
+d <- density(covids)
+cl5 <- colorRampPalette(c('cyan', 'purple', 'red')) (200) 
+plot(d, col=cl5, main="density")
+points(covids)
+
+library(rgdal)
+coastlines <- readOGR("ne_10m_coastline.shp")
+plot(coastlines,add=T)
+
+#interpolazione
+
+plot(s,col=cl1,main="Covid cases estimate")
+cl1 <- colorRampPalette(c('purple', 'pink', 'light pink')) (200) 
+
+points(covids)
+
+library(rgdal)
+coastlines <- readOGR("ne_10m_coastline.shp")
+plot(coastlines,add=T)
+
+dev.off()
+
+
+
+#carichiamo un nuovo set di dati messi nella nostra cartella lab;
+
+load("Tesi(1).RData")
+ls()
+#per fissare i nostri dati 
+attach(Tesi)
+
+#visualizziamo le prime 6 righe della tabella
+head(Tesi)
+
+#richiamiamo la libraria spatstat
+library(spatstat)
+
+#facciamo il nostro point pattern
+
+#per vedere il sommario dei nostri dati 
+summary(Tesi)
+
+tesip <- ppp(Longitude,Latitude,c(12.41,12.47),c(43.90,43.95))
+
+dt <- density(tesip)
+plot(dt)
+cl2 <- colorRampPalette(c("pink","purple","light pink"))
+
+plot(dt,col=cl2)
+
+points(tesip)
+
+
 # selezionare la WD
 setwd("C:/lab")
 
 # caricare il file RData
-load("sanmarino.RData")
+load("Tesi.RData")
+ls()
+
+head(Tesi)
+attach(Tesi)
+
+summary(Tesi)
+# x varia da 12.42 a 12.46
+# y varia da 43.91 a 43.94
+# point pattern: x,y,c(xmin,xmax),c(ymin,ymax)
+Tesippp <- ppp(Longitude, Latitude, c(12.41,12.47), c(43.9,43.95))
+
+dT <- density(Tesippp)
+
+plot(dT)
+points(Tesippp, col="green")
+
+colors()
 
 # visualiziamo i dati 
 ls()
@@ -561,6 +691,41 @@ plotRGB(p224r63_2011,r=3,g=4,b=2, stretch="lin")
 
 #infrarosso nella componente blu:
 plotRGB(p224r63_2011,r=3,g=2,b=4, stretch="lin")
+
+
+# day 2
+
+#Landcover
+
+#settiamo la nostra directory
+setwd("c:/lab")
+
+#richiamiamo la libreria raster
+library(raster)
+
+#recuperiamo le immagini che sono di nostro interesse contenute nella nostra working directory
+p224r63_2011 <- brick("p224r63_2011_masked.grd")
+
+#chiamiamo la libreria RStoolbox
+library(RStoolbox)
+
+plotRGB(p224r63_2011,r=4,g=3,b=2,stretch="Lin")
+
+#unsuperClass, l'mmagine di partenza e numero di classi 
+
+p224r63_2011c <- unsuperClass(p224r63_2011,nClasses = 4)
+
+#visualizziamo ciò che abbiamo svolto, informazione sull'immagine; si unisce la mappa al modello 
+p224r63_2011c
+
+#plottiamo la nostra mappa, i colori interi ci mostrano le nostre 4 classi;
+plot(p224r63_2011c$map)
+
+#cambiamo i colori del nostro grafico così da avere una migliore interpretazione del grafico
+
+clclass <- colorRampPalette(c('green',"red","blue","black"))(100)
+
+plot(p224r63_2011c$map,col=clclass)
 
 
 ########################################
