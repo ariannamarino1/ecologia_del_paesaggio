@@ -11,16 +11,21 @@
 # 9. R_code_snow.r   
 # 10. R_code_patches.r   
 
-# https://land.copernicus.vgt.vito.be/PDF/portal/Application.html
+# Dati Copernicus: https://land.copernicus.vgt.vito.be/PDF/portal/Application.html
 
-### 1 R code first
+
+##################################################
+##################################################
+##################################################
+
+### 1. R code first
 
 # PRIMO CODICE R ECOLOGIA DEL PAESAGGIO
 
-#istallare il pacchetto "sp" per la nuova libreria
+# istallare il pacchetto "sp" per la nuova libreria
 istall.packages("sp")
 library(sp)
-#require(sp) è un altro comando per far partire le librerie
+#AM require(sp) è un altro comando per far partire le librerie
 
 #con data vengono richiamati i dati contenuti nella libreria
 data(meuse)
@@ -43,6 +48,30 @@ pairs(~ cadmium + copper + lead , data = meuse)
 # Exercize: cadmium cooper lead zinc
 
 pairs(~ cadmium + copper + lead + zinc , data = meuse)
+
+
+#riprendiamo il set di dati "meuse"
+library(sp)
+data("meuse")
+meuse
+head(meuse)
+
+# funzione plot per creazione di un grafico
+plot(meuse$cadmium,meuse$copper)
+#il $ indica quale colonna del dataset si vuole prendere
+
+#mettere il evidenza il pacchetto di dati
+attach(meuse)
+
+#evidenziando il dataset meuse possiamo eviare di riscrivere meuse$... e scrivere solo i nomi delle colonne 
+
+plot(cadmium,copper)
+
+#grafico con colore, simbolo, titolo, ascisse e ordinate
+
+plot(cadmium,copper,pch=17,col="green",main="Primo plot")
+
+plot(cadmium,copper,pch=17,col="green",main="Primo plot",xlab="cadmio",ylab="copper")
 
 #[3:6] significa che vengono presi i dati relativi alla riga 3, 4, 5 e 6 che corrispondono a cadmium, copper, lead e zinc
 pairs(meuse[,3:6])
@@ -105,36 +134,19 @@ pairs(meuse[,3:6],lower.panel=panel.correlations,upper.panel=panel.smoothing,dia
 
 pairs(meuse[,3:6],lower.panel=panel.smoothing,upper.panel=panel.correlations,diag.panel=panel.histograms)
 
-#riprendiamo il set di dati "meuse"
-library(sp)
-data("meuse")
-head(meuse)
-
-# funzione plot per creazione di un grafico
-plot(meuse$cadmium,meuse$copper)
-#il $ indica quale colonna del dataset si vuole prendere
-
-#mettere il evidenza il pacchetto di dati
-attach(meuse)
-
-#evidenziando il dataset meuse possiamo eviare di riscrivere meuse$... e scrivere solo i nomi delle colonne 
-
-plot(cadmium,copper)
-
-plot(cadmium,copper,pch=17,col="green",main="Primo plot")
-
-plot(cadmium,copper,pch=17,col="green",main="Primo plot",xlab="cadmio",ylab="copper")
 
 
-########################################
-########################################
+##################################################
+##################################################
+##################################################
 
-### 2 R code spatial
+
+
+### 2. R code spatial
 # R spatial: funzioni spaziali in Ecologia del paesaggio
 
 # richiamo il pacchetto "sp"
 library(sp)
-
 
 # ci interessa il dataset "meuse"
 data("meuse")
@@ -152,6 +164,9 @@ plot(cadmium,lead,col="blue",pch=19,cex=2,main="Relazione cadmio piombo",xlab="C
 
 
 #exercise: plot del rame e zinco (copper e zinc) con carattere triangolo e colore verde
+plot(copper,zinc,pch=17,col="green",cex=2,main="Relazione copper zinc")
+
+# cambiare le etichette delle ordinate e delle ascisse
 plot(copper,zinc,pch=17,col="green",cex=2,main="Relazione copper zinc",xlab="Copper",ylab="Zinc")
 plot(cadmium,lead,col="blue",pch=19,cex=2)
 
@@ -159,14 +174,13 @@ plot(cadmium,lead,col="blue",pch=19,cex=2)
 #mostrare più di un grafico in una sola finestra con multiframe o multipanel
 par(mfrow=c(1,2))
 #mfrow=c(1,2) indica che creiamo una finestra con una riga e due colonne
-plot(cadmium,lead,main="Relazione cadmio e piombo",col="blue",pch=19,xlab="Cadmio",ylab="Piombo")
-plot(copper,zinc,main="Relazione tra Rame e Zinco",col="green",pch=17,xlab="Rame",ylab="Zinco")
+plot(cadmium,lead,main="Relazione cadmio e piombo",col="blue",pch=19,cex=2,xlab="Cadmio",ylab="Piombo")
+plot(copper,zinc,main="Relazione tra Rame e Zinco",col="green",pch=17,cex=2,xlab="Rame",ylab="Zinco")
 
 #se fosse mfrow=c(2,1) si avrebbe una finestra con una colonna e due righe
 par(mfrow=c(2,1))
-plot(cadmium,lead,main="Relazione cadmio e piombo",col="blue",pch=19,xlab="Cadmio",ylab="Piombo")
-plot(copper,zinc,main="Relazione tra Rame e Zinco",col="green",pch=17,xlab="Rame",ylab="Zinco")
-
+plot(cadmium,lead,main="Relazione cadmio e piombo",col="blue",pch=19,cex=2,xlab="Cadmio",ylab="Piombo")
+plot(copper,zinc,main="Relazione tra Rame e Zinco",col="green",pch=17,cex=2,xlab="Rame",ylab="Zinco")
 
 
 #multiframe automatico
@@ -195,10 +209,14 @@ spplot(meuse,"zinc")
 # il plot che è uscito è di tipo spaziale i punti gialli ci vanno ad indicare le zone più inquinate, stiamo analizzando le zone vicine ad un fiume.
 
 
-########################################
-########################################
 
-### 3 R code spatial.2
+
+##################################################
+##################################################
+##################################################
+
+
+### 3. R code spatial.2
 
 #SPATIAL 2
 
@@ -233,6 +251,7 @@ bubble(meuse,"copper",col="red",main="Indice spaziale Rame")
 
 
 #creare nuovo oggetto con nuovi dati rappresentanti foraminiferi e carbon capture
+# array
 foram<-c(10,20,35,55,67,80)
 carbon<-c(5,10,30,70,85,99)
 
@@ -246,20 +265,21 @@ setwd("C:/lab")
 covid<-read.table("covid_agg.csv",head=TRUE)
 
 
-########################################
-########################################
+
+##################################################
+##################################################
+##################################################
 
 
-### 4 R codde point patterns
+### 4. R codde point patterns
 
-# Codice per analisi dei point patterns
+# Codice per analisi dei point patterns (pattern legati ai punti)
 
 #impostare una working directory
 setwd("C:/lab")  
-setwd("C:/Users/asus/Desktop/Lezioni/Ecologia del paesaggio/lab")
+
 # importare dati
 #semplifichiamo il nome
-covid <- covid_agg
 covid<-read.table("covid_agg.csv",header=TRUE")
 # per vedere la tabella
 head(covid)
@@ -287,7 +307,7 @@ plot(covid$country,covid$cases,las=3,cex.axis=0.3)
 #installare la libreria ggplot2 e richiamarla
 library(ggplot2)
 
-#prendiamo i dati dalla libreria
+#prendiamo i dati dalla libreria ggplot2
 data(mpg)
 
 #mostriamo le prime sei righe
@@ -324,6 +344,12 @@ points(covids)
 
 #salvare il file in .Rdata
 #richiamare la work directory e caricare il file .RData salvato
+setwd("C:/lab")
+load("point_pattern.RData")
+
+ls()
+
+plot(d)
 
 #richiamare libraria spatstat
 library(spatstat)
@@ -338,6 +364,7 @@ plot(d,col=cl2)
 
 #completare la mappa aggiungendo i bordi dei paesi
 #istallare e richiamare libreria rgdal
+install.packages("rgdal")
 library(rgdal)
 
 #scarichaimo un nuovo pacchetto di dati delle coste in vettore
@@ -371,13 +398,18 @@ cl6<-colorRampPalette(c("white","blue","green","red","orange","yellow"))(150)
 plot(d,col=cl7)
 plot(coastlines,add=T)
 
+cl7<-colorRampPalette(c('white','blue','green','red','orange','yellow')) (150)
+plot(d, col=cl7)
+plot(coastlines, add=T)
+
 
 # INTERPOLATION
 
-
 #exercise: usiamo il vecchio sript sul covid e andiamo a plottare la mappa di densità;
-#carichiamo il vecchio script "Lezione spatial"
+#carichiamo il vecchio script 
 setwd("C:/lab")
+load("point_pattern.RData")
+
 point_pattern <- read.table("C:/lab/point_pattern.RData", quote="\"")
 ls()
 covid <- read.table("covid_agg.csv",header = T)
@@ -398,20 +430,20 @@ plot(coastlines,add=T)
 
 ###interpolazione
 
-covid
-#creiamo dei valori per interpolazione in base ad etichette per ogni paese
+head(covid)
 
+#creiamo dei valori per interpolazione in base ad etichette per ogni paese
 #usiamo il point pattern di ppp, e associamo alla colonna cases del dataset covid
 #se fai attach non si deve scrivere covid$cases ma solo cases
 marks(covids) <- cases
 
 #creiamo la mappa con la funzione smooth
 s <- Smooth(covids)
+plot(s)
 
 # Exercise: plot(s) with points and coastlines
-
-plot(s,col=cl1,main="Covid cases estimate")
-cl1 <- colorRampPalette(c('purple', 'pink', 'light pink')) (200) 
+cl4 <- colorRampPalette(c('violet', 'yellow', 'green')) (100) 
+plot(s,col=cl4,main="Covid cases estimate")
 
 points(covids)
 
@@ -422,7 +454,7 @@ plot(coastlines,add=T)
 
 #stima non della densità di punti ma di casi nel mondo;
 
-dev.off()
+text(covid)
 
 #mappa finale, unico fragico con entrambi i plot
 
@@ -430,8 +462,6 @@ par(mfrow=c(2,1))
 
 #densità 
 library(spatstat)
-covids <- ppp(lon,lat,c(-180,180),c(-90,90))
-d <- density(covids)
 cl5 <- colorRampPalette(c('cyan', 'purple', 'red')) (200) 
 plot(d, col=cl5, main="density")
 points(covids)
@@ -440,10 +470,10 @@ library(rgdal)
 coastlines <- readOGR("ne_10m_coastline.shp")
 plot(coastlines,add=T)
 
-#interpolazione
 
-plot(s,col=cl1,main="Covid cases estimate")
-cl1 <- colorRampPalette(c('purple', 'pink', 'light pink')) (200) 
+#interpolazione del numero di casi
+cl4 <- colorRampPalette(c('violet', 'yellow', 'green')) (100) 
+plot(s,col=cl4,main="Covid cases estimate")
 
 points(covids)
 
@@ -455,9 +485,9 @@ dev.off()
 
 
 
-#carichiamo un nuovo set di dati messi nella nostra cartella lab;
-
-load("Tesi(1).RData")
+#carichiamo un nuovo set di dati messi nella nostra cartella lab riguardanti i dati della tesi di San Marino
+setwd("C:/lab")
+load("Tesi.RData")
 ls()
 #per fissare i nostri dati 
 attach(Tesi)
@@ -472,41 +502,26 @@ library(spatstat)
 
 #per vedere il sommario dei nostri dati 
 summary(Tesi)
-
-tesip <- ppp(Longitude,Latitude,c(12.41,12.47),c(43.90,43.95))
-
-dt <- density(tesip)
-plot(dt)
-cl2 <- colorRampPalette(c("pink","purple","light pink"))
-
-plot(dt,col=cl2)
-
-points(tesip)
-
-
-# selezionare la WD
-setwd("C:/lab")
-
-# caricare il file RData
-load("Tesi.RData")
-ls()
-
-head(Tesi)
-attach(Tesi)
-
-summary(Tesi)
+ 
 # x varia da 12.42 a 12.46
 # y varia da 43.91 a 43.94
 # point pattern: x,y,c(xmin,xmax),c(ymin,ymax)
 Tesippp <- ppp(Longitude, Latitude, c(12.41,12.47), c(43.9,43.95))
 
 dT <- density(Tesippp)
-
 plot(dT)
-points(Tesippp, col="green")
+cl2 <- colorRampPalette(c("pink","purple","light pink"))
 
-colors()
+plot(dT,col=cl2)
 
+points(Tesippp,col="blue")
+
+colors() 
+
+####
+
+setwd("C:/lab/")
+load("sanmarino.RData")
 # visualiziamo i dati 
 ls()
 
@@ -515,10 +530,13 @@ ls()
 # Tesippp è il point pattern, coordinate della tabella originale 
 # a partire da Tesippp siamo riusciti a fare la dT, mappa di densità
 
+plot(dT)
+points(Tesippp,col="blue")
+
 # caricare la libreria
 library(spatstat)
 # visualizziamo la densità di campionamento
-points(Tesippp, col="green")
+points(Tesippp, col="blue")
  
 head(Tesi)
 
@@ -542,10 +560,11 @@ setwd("C:/lab")
 library(rgdal)
 # possiamo leggere il file .shp
 sanmarino<-readOGR("San_Marino.shp")
+
 # e ora plottarlo
 plot(sanmarino) #visualizziamo il territorio di San Marino
 plot(interpol,add=T) #add=T sovrappone la mappa dell'interpolazione alla mappa di San Marino
-points(Tesippp,add=T) #sovrappone i punti alle mappe di prima
+points(Tesippp,col="blue") #sovrappone i punti alle mappe di prima
 plot(sanmarino,add=T) #per far vedere di nuovo i confini di San Marino
 
 
@@ -568,13 +587,16 @@ plot(interpol,main="Estimate of species richness")
 points(Tesippp,col="blue")
 
 
-########################################
-########################################
 
-### 5 R code teleril
+##################################################
+##################################################
+##################################################
 
-#telerilevamento
 
+### 5. R code teleril
+# telerilevamento
+
+# codice R per le immagini satellitari
 
 #istallare librerie che ci serviranno per lavorare con i nostri dati
 
@@ -599,15 +621,28 @@ plot(p224r63_2011)
 # B6: thermal infrared
 # B7: medium infrared
 
+# save RData
+
+###
+
+# day 2
+setwd("C:/lab") # windows
+
+load("teleril.RData")
+
+ls()
+# [1] "p224r63"      "p224r63_2011"
+
+library(raster)
+plot(p224r63_2011)
+
 #per cambiare la scala cromatica
 cl <- colorRampPalette(c("black","grey","light grey"))(100) 
-
 #con cl abbiamo chiamato il comando precedente che dobbiamo aggiungere al grafico
 plot(p224r63_2011,col=cl)
 
 #modifica delle scale cormatiche
 cllow <- colorRampPalette(c("black","grey","light grey"))(5) 
-
 #inserirle nel grafico
 plot(p224r63_2011,col=cllow)
 
@@ -616,20 +651,16 @@ names(p224r63_2011)
 
 #cambiamo in scala di blu la banda blu
 clb <- colorRampPalette(c("dark blue","blue","light blue"))(100)
-
 #attach data frame non funziona con raster 
 #visualizzare solo la banda del blu all'interno del grafico
 plot(p224r63_2011$B1_sre,col=clb)
+# $ colonna legato al dataset
 
-#visualizzare solo la banda verde nel grafico
-clg <- colorRampPalette(c("dark green","green","light green"))(100)
-plot(p224r63_2011$B2_sre,col=clg)
+# Exercise: plottare la banda dell'infrarosso vicino con colorRampPalette che varia dal rosso, all'arancione, al giallo
+clnir <- colorRampPalette(c('red','orange','yellow'))(100)
+plot(p224r63_2011$B4_sre, col=clnir)
 
-#exercise: fai infrarosso vicino con la scala cromatica da rosso a giallo 
-clir <- colorRampPalette(c("purple","pink","light pink"))(100)
-plot(p224r63_2011$B4_sre,col=clir)
-
-#grafico multiframe in cui visualizzare le quattro diverse bande insieme
+# multiframe
 par(mfrow=c(2,2))
 
 #blue
@@ -656,15 +687,25 @@ dev.off()
 #comando
 plotRGB(p224r63_2011,r=3,g=2,b=1)
 
+# B1: blue - 1
+# B2: green - 2
+# B3: red - 3
+# B4: near infrared (nir) - 4 
+
 #essendo il risultato nero, usiamo la funzione stretch="lin"
 plotRGB(p224r63_2011,r=3,g=2,b=1, stretch="lin")
 
 #per visualizzare meglio il nostro grafico risultante cambiamo le bande inserendo l'infrarosso 
 plotRGB(p224r63_2011,r=4,g=3,b=2, stretch="lin")
-
 #essendo le piante riflettenti assumeranno il colore rosso
 #il celeste indicherà le zone agricole non coltivata
 #il rosa le zone agricole coltivate
+
+#salvare l'immagine della mappa ottenuta
+pdf("primografico.pdf") # png("primografico.png")
+plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
+dev.off()
+
 
 #visualizzare i 2 grafici ottenuti usando la funzione multiframe
 par(mfrow=c(2,1))
@@ -672,77 +713,37 @@ par(mfrow=c(2,1))
 plotRGB(p224r63_2011,r=3,g=2,b=1, stretch="lin")
 plotRGB(p224r63_2011,r=4,g=3,b=2, stretch="lin")
 
-
-#per salvare il grafico  in pdf
-pdf("telerilevamento-1.pdf")
-plotRGB(p224r63_2011,r=4,g=3,b=2, stretch="lin")
 dev.off()
 
+# nir nella compnente R(Red)
+plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
 
-par(mfrow=c(2,1))
+# Exercise: infrarosso nella componente green
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
 
-plotRGB(p224r63_2011,r=3,g=2,b=1, stretch="lin")
-plotRGB(p224r63_2011,r=4,g=3,b=2, stretch="lin")
-dev.off()
-
-
-# exercise: infrarosso lo montiamo in alre componenti green
-plotRGB(p224r63_2011,r=3,g=4,b=2, stretch="lin")
-
-#infrarosso nella componente blu:
-plotRGB(p224r63_2011,r=3,g=2,b=4, stretch="lin")
+# Exercise: infrarosso nella componente blue
+plotRGB(p224r63_2011, r=3, g=2, b=4, stretch="Lin")
 
 
+###
 # day 2
 
-#Landcover
-
-#settiamo la nostra directory
-setwd("c:/lab")
-
-#richiamiamo la libreria raster
-library(raster)
-
-#recuperiamo le immagini che sono di nostro interesse contenute nella nostra working directory
-p224r63_2011 <- brick("p224r63_2011_masked.grd")
-
-#chiamiamo la libreria RStoolbox
-library(RStoolbox)
-
-plotRGB(p224r63_2011,r=4,g=3,b=2,stretch="Lin")
-
-#unsuperClass, l'mmagine di partenza e numero di classi 
-
-p224r63_2011c <- unsuperClass(p224r63_2011,nClasses = 4)
-
-#visualizziamo ciò che abbiamo svolto, informazione sull'immagine; si unisce la mappa al modello 
-p224r63_2011c
-
-#plottiamo la nostra mappa, i colori interi ci mostrano le nostre 4 classi;
-plot(p224r63_2011c$map)
-
-#cambiamo i colori del nostro grafico così da avere una migliore interpretazione del grafico
-
-clclass <- colorRampPalette(c('green',"red","blue","black"))(100)
-
-plot(p224r63_2011c$map,col=clclass)
-
-
-########################################
-########################################
-
-### 6 R code teleril.2
 #telerilevamento parte due
 
 #per riuscire ad usare le funzioni di telerilevamnento bisogna usare la libreria raster;
 library(raster)
 
 #settiamo la working directory
-setwd("~/Desktop/lab")
+setwd("C:/lab")
 
 #questa volta useremo un altra immagine per il nostro telerilevamento
 #NB. abbiamo messo nella directory un set di dati che andremo ad usare durante tutto il nostro lavoro su R
 #applichiamo la funzione brick per riuscire a rinominare e portare in R la nostra immagine di interesse
+
+load("teleril.RData")
+
+# list
+ls()
 
 p224r63_1988 <- brick("p224r63_1988_masked.grd")
 
@@ -776,9 +777,9 @@ plot(p224r63_1988$B2_sre,col=clg)
 clr <- colorRampPalette(c("red","orange","yellow"))(100)
 plot(p224r63_1988$B3_sre,col=clr)
 
-#infrared
-clir <- colorRampPalette(c("purple","pink","light pink"))(100)
-plot(p224r63_1988$B4_sre,col=clir)
+#nir
+clnir <- colorRampPalette(c("purple","pink","light pink"))(100)
+plot(p224r63_1988$B4_sre,col=clnir)
 
 #per chiudere la finestra attuale useremo:
 
@@ -788,10 +789,7 @@ dev.off()
 
 plotRGB(p224r63_1988,r=3,g=2,b=1,stretch="Lin")
 
-#essendo il grafico non comprensibile useremo la scala cromatica 
-
-plotRGB(p224r63_1988,r=3,g=2,b=1,stretch="Lin")
-
+#essendo il grafico non comprensibile useremo la scala cromatica dei colori falsi
 #exercise: creiamo il plot con la componente infrarosso nella componente rossa;
 #in questo caso i colori vengono definiti False colours;
 
@@ -828,15 +826,14 @@ plot(dvi1988)
 dvi2011 <- p224r63_2011$B4_sre-p224r63_2011$B3_sre
 plot(dvi2011)
 
-par(mfrow=c(2,1))
- #Per cambiare colore si userà il comando color ramp palette
+#Per cambiare colore si userà il comando color ramp palette
 cldvi11 <- colorRampPalette(c('dark green','green','light green'))(100)
 plot(dvi2011,col=cldvi11)
+
 
 #adesso abbiamo i DVI dei 2 anni, se facciamo la differenza tra i 2 anni vedremo quanto è stato il cambiamento della vegetazione, se il valore del 2011 è negativo vuol dire che la vegetazione stava meglio nel 1988
 #multitemporal analysis
 dfdvi <- dvi2011-dvi1988
-
 
 # creiamo l' immagine che ci mostra le zone dove le piante sono state in maggiore stress
 plot(dfdvi)
@@ -845,9 +842,8 @@ plot(dfdvi,col=cldfdvi)
 
 #visualizzare tutti i grafici assieme usando un multiframe di immagine di 1988. 2011 e differenza di indice 
 par(mfrow=c(3,1))
-
-plotRGB(p224r63_2011,r=4,g=3,b=2,stretch="Lin")
 plotRGB(p224r63_1988,r=4,g=3,b=2,stretch="Lin")
+plotRGB(p224r63_2011,r=4,g=3,b=2,stretch="Lin")
 plot(dfdvi,col=cldfdvi)
 
 dev.off()
@@ -868,15 +864,16 @@ plotRGB(p224r63_2011,r=4,g=3,b=2,stretch="Lin")
 plotRGB(p224r63_2011lr,r=4,g=3,b=2,stretch="Lin")
 dev.off()
 
-#cambiamo il fattore in 50
-p224r63_2011lr2 <- aggregate(p224r63_2011,fact=50)
+#cambiamo il fattore in 50, lower resolution
+p224r63_2011lr50 <- aggregate(p224r63_2011,fact=50)
 #visualizziamo le informazioni dell'immagine
-p224r63_2011lr2
+p224r63_2011lr50
 
 #creiamo il nostro grafico mettendoli sempre in correlazione;
-par(mfrow=c(2,1))
+par(mfrow=c(3,1))
 plotRGB(p224r63_2011,r=4,g=3,b=2,stretch="Lin")
-plotRGB(p224r63_2011lr2,r=4,g=3,b=2,stretch="Lin")
+plotRGB(p224r63_2011lr,r=4,g=3,b=2,stretch="Lin")
+plotRGB(p224r63_2011lr50,r=4,g=3,b=2,stretch="Lin")
 dev.off()
 
 #facciamo un dvi della nuova immagine 2011
@@ -884,31 +881,34 @@ dvi2011lr50 <- p224r63_2011lr2$B4_sre - p224r63_2011lr2$B3_sre
 plot(dvi2011lr50)
 
 #diminuiamo la risoluzione del 1988
-p224r63_1988lr2 <- aggregate(p224r63_1988,fact=50)
+p224r63_1988lr50 <- aggregate(p224r63_1988,fact=50)
 
 #facciamo un dvi della nuava immagine 1988
 dvi1988lr50 <- p224r63_1988lr2$B4_sre - p224r63_1988lr2$B3_sre
 plot(dvi1988lr50)
 
 #facciamo la differenza dei DVI dei due anni a bassa risoluzione
-dfdvilr <- dvi2011lr50-dvi1988lr50
+dfdvilr50 <- dvi2011lr50-dvi1988lr50
 
 #creiamo la nostra immagine:
-plot(dfdvilr,col=cldfdvi)
+cldifdvi <- colorRampPalette(c('red','white','blue'))(100)
+plot(dfdvilr50,col=cldfdvi)
 
 #multiframe del totale 
 par(mfrow=c(2,1))
 plot(dfdvi,col=cldfdvi)
-plot(dfdvilr,col=cldfdvi)
+plot(dfdvilr50,col=cldfdvi)
 dev.off()
 
 #é importante usare la scala giusta per evitare di non riuscire a distinguere le microdivresità presente nel grafico;
 
 
-########################################
-########################################
 
-### 7 R code multitemp
+##################################################
+##################################################
+##################################################
+
+### 7. R code multitemp
 # Lezione 29 Aprile
 # R code analisi multitemporale di variazione della land cover
 
@@ -946,6 +946,7 @@ dev.off()
 # per la classificazione si usa unsuperClass che significa classificazione non supervisionata, cioè non diamo dei training set al pc
 # per far ciò dobbiamo caricare un'atra libreria
 library(RStoolbox)
+
 d1c<-unsuperClass(defor1,nClasses=2)
 # in d1c abbiamo la mappa
 d1c$map
@@ -963,17 +964,17 @@ d2c$map
 # facciamo il plot
 plot(d2c$map)
 
-cl2<-colorRampPalette(c('green','blue'))(100)
-plot(d2c$map,col=cl2)
+cl1<-colorRampPalette(c('green','blue'))(100)
+plot(d2c$map,col=cl1)
 
 # mettiamo a confronte le due immagini
 par(mfrow=c(2,1))
 plot(d1c$map,col=cl1)
-plot(d2c$map,col=cl2)
+plot(d2c$map,col=cl1)
 
 par(mfrow=c(1,2))
 plot(d1c$map, col=cl1)
-plot(d2c$map, col=cl2)
+plot(d2c$map, col=cl1)
 
 dev.off()
 
@@ -989,7 +990,7 @@ cl3<-colorRampPalette(c('orange','green','blue'))(100)
 plot(d2c$map,col=cl3)
 ###########
 
-
+freq(d1c$map)
 # quatificare la quantità di foresta che è stata persa
 # area aperta = 306059
 # foresta = 35233
@@ -997,11 +998,14 @@ plot(d2c$map,col=cl3)
 # calcoliamo dapprima il totale
 totd1<- 306059 + 35233
 # totd1 = 341292
+
 # possiamo calcolare la percentuale
 percent1<-freq(d1c$map)*100/totd1
+
 # percentuali
 # foreste = 89.7
 # aree aperte = 10.3
+
 
 # per il defor2
 freq(d2c$map)
@@ -1010,8 +1014,10 @@ freq(d2c$map)
 
 totd2<-179087 + 163639
 # totd2 = 342726
+
 # percentuale
 percent2<-freq(d2c$map)*100/totd2
+
 # foreste = 52.2
 # aree aperte = 47.8
 
@@ -1020,6 +1026,7 @@ percent2<-freq(d2c$map)*100/totd2
 cover <- c("Agriculture","Forest")
 before<-c(10.3,89.7)
 after<-c(47.8,52.2)
+
 output <- data.frame(cover,before,after)
 View(output)
 
@@ -1027,14 +1034,16 @@ View(output)
 #### DAY 2 ###
 # riapriamo il file dell'utlima lezione
 setwd("C:/lab")
-load("multitemp.RData")
+load("defor.RData")
 ls()
 
 # rivediamo le immagini a confronto della foresta prima e dopo il disboscamento
 library(raster)
-par(mfrow=c(2,1))
+par(mfrow=c(1,2))
+cl1<-colorRampPalette(c('green','blue'))(100)
 plot(d1c$map,col=cl1)
-plot(d2c$map,col=cl2)
+plot(d2c$map,col=cl1)
+
 dev.off()
 
 # controliamo il dataframe contenete l'agricultura e la foresta prima e dopo il disboscamento
@@ -1043,9 +1052,10 @@ output
 
 # possiamo quindi fare un plot della percentuale di foresta attuale e precedente
 
-# plot della percentuale precedente
+
 # carichiamo la libreria ggplot2
 library(ggplot2)
+# plot della percentuale precedente la deforestazione
 grafico1<-ggplot(output,aes(x=cover,y=before,color=cover))+geom_bar(stat="identity",fill="white")
 grafico1
 # faremo degli istogrammi del dataframe di output
@@ -1055,7 +1065,7 @@ grafico1
 # fill dà il colore alla copertura
 
 ## Exercize: plot the histograms of the land cover after deforestation
-grafico22<-ggplot(output,aes(x=cover,y=after,color=cover))+geom_bar(stat="identity",fill="white")
+grafico2<-ggplot(output,aes(x=cover,y=after,color=cover))+geom_bar(stat="identity",fill="white")
 grafico2
 
 # possiamo fare un plot dei due istogrammi per confrontarli
@@ -1069,15 +1079,18 @@ grid.arrange(grafico1,grafico2,nrow=1)
 
 # mettiamo la scala dell'asse delle y da 0 a 100 così i due grafici possono essere confrontati meglio
 grafico1<-ggplot(output,aes(x=cover,y=before,color=cover))+geom_bar(stat="identity",fill="white")+ylim(0,100)
-grafico22<-ggplot(output,aes(x=cover,y=after,color=cover))+geom_bar(stat="identity",fill="white")+ylim(0,100)
+grafico2<-ggplot(output,aes(x=cover,y=after,color=cover))+geom_bar(stat="identity",fill="white")+ylim(0,100)
 grid.arrange(grafico1,grafico2,nrow=1)
 
 
 
-########################################
-########################################
 
-# 8 R code multitemp NO2
+##################################################
+##################################################
+##################################################
+
+
+# 8. R code multitemp NO2
 
 # codice per analisi dei dati NO2 da ESA - gennaio a marzo 2020
 
@@ -1088,6 +1101,9 @@ library(raster)
 
 # settiamo la WD
 setwd("C:/lab")
+
+EN01<-raster("EN_0001.png")
+plot(EN01)
 
 # dobbiamo importare le singole immagini con la funzione raster
 EN01<-raster("EN_0001.png")
@@ -1118,7 +1134,7 @@ dev.off()
 
 # difference
 difno2 <- EN13 - EN01
-cldif <- colorRampPalette(c('blue','black','yellow'))(100) #
+cldif <- colorRampPalette(c('blue','black','yellow'))(100)
 plot(difno2, col=cldif)
 
 # plottiamo tutte le immagini
@@ -1172,8 +1188,6 @@ cl<-colorRampPalette(c('red','orange','yellow'))(100)
 plot(EN,col=cl)
 
 
-####
-
 library(raster)
 setwd("C:/lab/esa_no2")
 
@@ -1199,12 +1213,15 @@ boxplot(EN,horizontal=T,outiline=F,axes=T)
 
 
 
-########################################
-########################################
 
-### 9 R code Snow
+##################################################
+##################################################
+##################################################
 
-# settimao la WD
+
+### 9. R code Snow
+
+# settiamo la WD
 setwd("C:/lab")
 
 # istalliamo la libreria 
@@ -1225,8 +1242,9 @@ plot(snowmay,col=cl)
 setwd("C:/lab/snow")
 
 #importiamo tutti i file
-librari(raster)
-rlist=list.files(pattern="snow")
+library(raster)
+rlist=list.files(pattern="snow",full.names=T)
+
 #usiamo lapply
 list_rast=lapply(rlist,raster)
 snow.multitemp<-stack(list_rast)
@@ -1259,10 +1277,12 @@ plot(predicted.snow.2025.norm,col=cl)
 
 
 
-########################################
-########################################
 
-### 10 R code patches
+##################################################
+##################################################
+##################################################
+
+### 10. R code patches
 
 # Settiamo innanzitutto la WD
 setwd("C:/lab")
@@ -1357,6 +1377,46 @@ output <- data.frame(time,npatches)
 # richiamiamo la libreria ggplot2
 library(ggplot2)
 ggplot(output, aes(x=time, y=npatches, color="red")) + geom_bar(stat="identity", fill="white")
+
+
+    
+    
+    
+    
+    
+    
+
+#Landcover
+
+#settiamo la nostra directory
+setwd("c:/lab")
+
+#richiamiamo la libreria raster
+library(raster)
+
+#recuperiamo le immagini che sono di nostro interesse contenute nella nostra working directory
+p224r63_2011 <- brick("p224r63_2011_masked.grd")
+
+#chiamiamo la libreria RStoolbox
+library(RStoolbox)
+
+plotRGB(p224r63_2011,r=4,g=3,b=2,stretch="Lin")
+
+#unsuperClass, l'mmagine di partenza e numero di classi 
+
+p224r63_2011c <- unsuperClass(p224r63_2011,nClasses = 4)
+
+#visualizziamo ciò che abbiamo svolto, informazione sull'immagine; si unisce la mappa al modello 
+p224r63_2011c
+
+#plottiamo la nostra mappa, i colori interi ci mostrano le nostre 4 classi;
+plot(p224r63_2011c$map)
+
+#cambiamo i colori del nostro grafico così da avere una migliore interpretazione del grafico
+
+clclass <- colorRampPalette(c('green',"red","blue","black"))(100)
+
+plot(p224r63_2011c$map,col=clclass)
 
 
 
