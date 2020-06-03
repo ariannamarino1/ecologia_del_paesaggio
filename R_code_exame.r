@@ -1455,7 +1455,7 @@ plot(snow.multitemp.italy, col=clb, zlim=c(20,200))
 
 # facciamo un'analisi con boxplot
 boxplot(snow.multitemp.italy, horizontal=T,outline=F)
-    
+# come variano le immagini nel tempo, attraverso una stima quantitativa della copertura nevosa in più o in meno
     
     
 ##################################################
