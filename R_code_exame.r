@@ -23,89 +23,93 @@
 
 # PRIMO CODICE R ECOLOGIA DEL PAESAGGIO
 
-# istallare il pacchetto "sp" per la nuova libreria
+# AM: librerie
+library(sp) 
+# AM: libreria sp è utile per lavorare sulle classi e i metodi dei dati spaziali
+
+
+# AM: bisogna installare il pacchetto di dati "sp" e successivamente richiamarlo con la libreria
 istall.packages("sp")
 library(sp)
 #AM require(sp) è un altro comando per far partire le librerie
 
-#con data vengono richiamati i dati contenuti nella libreria
+# AM: con data vengono richiamati i dati contenuti e disponibili nella libreria
+# AM: "meuse" è un set di dati sulle posizioni e concentrazioni di metalli pesanti nel terreno, con una serie di variabili del suolo e del paesaggio nei punti di psservazione, raccolte nel fiume Mose in un paese del Lussemburgo.
 data(meuse)
-meuse #visualizzare i dati
+# AM: per visualizzare i dati contenuti in meuse basta mandare il comando
+meuse 
 
-#
+# AM: con la funzione head() è possibile vedere le prime sei righe del dataset
 head(meuse)
-#
+# AM: la funzione names() ci permette di visualizzare i nomi delle colonne del dataset
 names(meuse)
 
-#con summary si visualizzano i principali indici statistici dei dati in considerazione
+# AM: la funzione summary() è un afunzione generica utilizzata per fornire riepiloghi dei risultati delle varie funzioni di adattamento del modello
 summary(meuse)
 
-#creazione di un grafico 
+# AM: la funzione pairs() produce una matrice di scatterplots 
 pairs(meuse)
 
-#
+# AM: selezionando le variabili dal dataset si ottiene una matrice di scatterplots relativa alle variabili selezionate
 pairs(~ cadmium + copper + lead , data = meuse)
 
 # Exercize: cadmium cooper lead zinc
-
 pairs(~ cadmium + copper + lead + zinc , data = meuse)
 
 
-#riprendiamo il set di dati "meuse"
+# AM: riprendiamo il set di dati "meuse"
 library(sp)
 data("meuse")
 meuse
 head(meuse)
 
-# funzione plot per creazione di un grafico
+# AM: si uta la funzione plot() per la creazione di un grafico
 plot(meuse$cadmium,meuse$copper)
-#il $ indica quale colonna del dataset si vuole prendere
+# AM: il $ seguito dal nome di una colonna sta ad indicare quale colonna del dataset si decide di prendere in analisi
 
-#mettere il evidenza il pacchetto di dati
+# AM: se si deve lavorare con dati all'interno del dataset "meuse" basta usare la funzione attach() che collega il dataset alle successive funzioni
 attach(meuse)
 
-#evidenziando il dataset meuse possiamo eviare di riscrivere meuse$... e scrivere solo i nomi delle colonne 
-
+# AM: una volta legato il dataset meuse alle funzioni si può evitare di usare il "meuse$..." per selezionare le colonne. Basta a questo punto scrivere solo il nome delle colonne da esaminare
 plot(cadmium,copper)
 
-#grafico con colore, simbolo, titolo, ascisse e ordinate
-
-plot(cadmium,copper,pch=17,col="green",main="Primo plot")
-
+# AM: in un grafico è possibile modificare il colore e/o il simbolo, è possibile mettere un titolo al grafico, titolare le ascisse e le ordinate
+# AM: pch=n , dove 'n' rappresenta un numero intero, da 1 a 25. Ad ogni numero corrisponde un simbolo
+# AM: col="colore" , dove 'colore' deve essere sostituito dal nome inglese del colore che si vuole utilizzare. In alternativa al nome del colore si può usare un numero [1;657].
+# AM: main="..." è il comand usato per dare il titolo al grafico.
 plot(cadmium,copper,pch=17,col="green",main="Primo plot",xlab="cadmio",ylab="copper")
 
-#[3:6] significa che vengono presi i dati relativi alla riga 3, 4, 5 e 6 che corrispondono a cadmium, copper, lead e zinc
+# AM: quando si vogliono prendere dei dati relativi a determinate righe si può usare la [..:..]. 
+# AM: Nel caso [3:6] significa che vengono presi i dati relativi alla riga 3, 4, 5 e 6 che corrispondono a cadmium, copper, lead e zinc
 pairs(meuse[,3:6])
 
-#per cambiare il colore di visualizzazione nel grafico si usa col="colore"
+# AM: cambio colore col="blue"
 pairs(meuse[,3:6],col="blue")
 
-#con pch=numero si sceglie la forma dei punti
+# AM: cambio simbolo pch=18 (18= rombo)
 pairs(meuse[,3:6],col="blue",pch=18)
 
-#con cex=numero si ridimensione la grandezza del punti nel grafico
-pairs(meuse[,3:6],col="blue",pch=18,cex=3)
+# AM: se si vuole ridimensionare la grandezza del punti nel grafico si usa cex=n, dove 'n' viene sostituito con il numero
+pairs(meuse[,3:6],col="blue",pch=18,cex=0.5)
 
-#con main="..." si titola il grafico
-pairs(meuse[,3:6],col="blue",pch=18,cex=3,main="Primo pairs")
+# AM: titolare il grafico con main="..."
+pairs(meuse[,3:6],col="blue",pch=18,cex=0.5,main="Primo pairs")
 
-#prendiamo delle funzioni esterne;
+# AM: prendiamo delle funzioni esterne
+# AM: panel.correlation è una funzione definita che indica il pannello del coefficiente di correlazione per la coppia di funzioni
 panel.correlations <- function(x, y, digits=1, prefix="", cex.cor)
 {
   usr <- par("usr"); on.exit(par(usr))
   par(usr = c(0, 1, 0, 1))
   r1=cor(x,y,use="pairwise.complete.obs")
   r <- abs(cor(x, y,use="pairwise.complete.obs"))
-  
-  
-  
   txt <- format(c(r1, 0.123456789), digits=digits)[1]
   txt <- paste(prefix, txt, sep="")
   if(missing(cex.cor)) cex <- 0.9/strwidth(txt)
   text(0.5, 0.5, txt, cex = cex * r)
 }
 
-
+# AM: panel.smoothing è una funzione di esempio di una semplice funzione utile del pannello da usare come argomento in pairs
 panel.smoothing <- function (x, y, col = par("col"), bg = NA, pch = par("pch"),
                              cex = 1, col.smooth = "red", span = 2/3, iter = 3, ...)
 {
@@ -116,7 +120,7 @@ panel.smoothing <- function (x, y, col = par("col"), bg = NA, pch = par("pch"),
           col = 1, ...)
 }
 
-
+# AM: panel.histograms è una funzione relativa alla realizzazione di un pannello del grafico che indicano un istogramma e una curva di densità
 panel.histograms <- function(x, ...)
 {
   usr <- par("usr"); on.exit(par(usr))
@@ -128,11 +132,13 @@ panel.histograms <- function(x, ...)
 }
 
 
-#mandate le tre funzioni esterne si avrà la possibilità di creare grafici diversi nello stesso grafico rappresentanti situazioni diverse
+# AM: una volta inviate le tre funzioni esterne si avrà la possibilità di diversificare i grafici all'interno dello stesso grafico a rappresentanza di situazioni diverse
+# AM: lower.panel indica i pannelli al di sotto dei pannelli diagonali
+# AM: upper.panel indica i pannelli al di dopra dei pannelli diagonali
+# AM: diag.panel indica i pannelli diagonali
 pairs(meuse[,3:6],lower.panel=panel.correlations,upper.panel=panel.smoothing,diag.panel=panel.histograms)
 
 # EXERCISE: mettere come lower panel lo smoothing, come diagonal panel gli istogrammi e come upper panel le correlazioni
-
 pairs(meuse[,3:6],lower.panel=panel.smoothing,upper.panel=panel.correlations,diag.panel=panel.histograms)
 
 
