@@ -53,7 +53,7 @@ pairs(meuse)
 # AM: selezionando le variabili dal dataset si ottiene una matrice di scatterplots relativa alle variabili selezionate
 pairs(~ cadmium + copper + lead , data = meuse)
 
-# Exercize: cadmium cooper lead zinc
+# EXERCISE: cadmium cooper lead zinc
 pairs(~ cadmium + copper + lead + zinc , data = meuse)
 
 
@@ -133,9 +133,9 @@ panel.histograms <- function(x, ...)
 
 
 # AM: una volta inviate le tre funzioni esterne si avrà la possibilità di diversificare i grafici all'interno dello stesso grafico a rappresentanza di situazioni diverse
-# AM: lower.panel indica i pannelli al di sotto dei pannelli diagonali
-# AM: upper.panel indica i pannelli al di dopra dei pannelli diagonali
-# AM: diag.panel indica i pannelli diagonali
+# AM: lower.panel si riferisce ai pannelli al di sotto dei pannelli diagonali
+# AM: upper.panel si riferisce ai pannelli al di dopra dei pannelli diagonali
+# AM: diag.panel si riferisce ai pannelli diagonali
 pairs(meuse[,3:6],lower.panel=panel.correlations,upper.panel=panel.smoothing,diag.panel=panel.histograms)
 
 # EXERCISE: mettere come lower panel lo smoothing, come diagonal panel gli istogrammi e come upper panel le correlazioni
@@ -152,68 +152,77 @@ pairs(meuse[,3:6],lower.panel=panel.smoothing,upper.panel=panel.correlations,dia
 ### 2. R code spatial
 # R spatial: funzioni spaziali in Ecologia del paesaggio
 
-# richiamo il pacchetto "sp"
+# AM: librerie utili per il codice
+library(sp)
+library(GGally)
+
+# AM: richiamare il pacchetto "sp" con il comando:
 library(sp)
 
-# ci interessa il dataset "meuse"
+# AM: si prende in esame il dataset "meuse"
 data("meuse")
 
-head(meuse) #visualizzaimo i primi sei
+# AM: visualizzare le prime sei righe
+head(meuse) 
 
-#fissiamo il dataframe
+# AM: dato che verrà usato questo dataset lo fissiamo 
 attach(meuse)
 
-#plot pre mettere in relazione cadmio e piombo
+# AM: mettere in relazione cadmio e piombo attraverso il plot, specificando titolo, colore, simbolo, ascisse e ordinate
 plot(cadmium,lead,main="Relazione cadmio piombo",col="blue",pch=19,cex=2,xlab="Cadmio",ylab="Piombo")
 
-#cambiare le etichette
-plot(cadmium,lead,col="blue",pch=19,cex=2,main="Relazione cadmio piombo",xlab="Cadmio",ylab="Piombo")
 
-
-#exercise: plot del rame e zinco (copper e zinc) con carattere triangolo e colore verde
+# EXERCIZE: plot del rame e zinco (copper e zinc) con simbolo triangolo (17) e colore verde
 plot(copper,zinc,pch=17,col="green",cex=2,main="Relazione copper zinc")
 
-# cambiare le etichette delle ordinate e delle ascisse
+# AM: mettere le etichette relative alle ascisse e alle ordinate
 plot(copper,zinc,pch=17,col="green",cex=2,main="Relazione copper zinc",xlab="Copper",ylab="Zinc")
+
+# EXERCISE: mettere in relazione cadmium e lead
 plot(cadmium,lead,col="blue",pch=19,cex=2)
 
 
-#mostrare più di un grafico in una sola finestra con multiframe o multipanel
+# AM: è possibile mostrare più grafici in una sola finestra con multiframe o multipanel, specificando il numero di righe e di colonne
+# AM: par(mfrow) è la funzione che mermette di gestire l'aspetto dei grafici, per creare un semplice diagramma a più riquadri
+# AM: mfrow=c(1,2) indica che creiamo una finestra con una riga e due colonne
 par(mfrow=c(1,2))
-#mfrow=c(1,2) indica che creiamo una finestra con una riga e due colonne
 plot(cadmium,lead,main="Relazione cadmio e piombo",col="blue",pch=19,cex=2,xlab="Cadmio",ylab="Piombo")
 plot(copper,zinc,main="Relazione tra Rame e Zinco",col="green",pch=17,cex=2,xlab="Rame",ylab="Zinco")
 
-#se fosse mfrow=c(2,1) si avrebbe una finestra con una colonna e due righe
+# AM: se fosse mfrow=c(2,1) si avrebbe una finestra con una colonna e due righe
 par(mfrow=c(2,1))
 plot(cadmium,lead,main="Relazione cadmio e piombo",col="blue",pch=19,cex=2,xlab="Cadmio",ylab="Piombo")
 plot(copper,zinc,main="Relazione tra Rame e Zinco",col="green",pch=17,cex=2,xlab="Rame",ylab="Zinco")
 
 
-#multiframe automatico
-#installo il pacchetto "Ggally"
+# AM: multiframe automatico
+# AM: installare il pacchetto "Ggally". (Bisogna prestare attenzione alla scrittura con le lettere maiuscore perchè R è case sensitive). Queso pacchetto estende 'ggplot2' aggiungendo diverse funzioni per ridurre la complessità della combinazione di oggetti geometrici con dati trasformato.
 install.packages("GGally")
 library(GGally)
 
-#il comando ggpairs permette di avere un grafico con tutte le variabili
+library(sp)
+data(meuse)
+
+# AM: il comando ggpairs crea una matrice di grafici con un determinato set di dati
 ggpairs(meuse)
 
-#si crea un grafico con le variabili di interesse, quelle dalla terza alla sesta colonna [,3:6]
+# AM: creare un grafico con le variabili di interesse, quelle dalla terza alla sesta colonna [,3:6] del datase meuse
 ggpairs(meuse[,3:6]) 
 
 
-#Spatial!
+# Spatial!
 head(meuse)
 
-#dobbiamo specificare che i dati hanno delle coordinate
+# AM: bisogna specificare che i dati hanno delle coordinate e questo viene fatto usando il comando coordinates() che recupera le coordinate spaziali di un oggetto spaziale
 coordinates(meuse)=~x+y 
 
-#mostrare il grafico
+# AM: si può dunque mostrare il grafico
 plot(meuse)
 
-#funzioni ssplot per visualizare nel grafico i dati spazialmente
+# AM: la funzione sp plot traccia spazialmente i dati nel grafico 
 spplot(meuse,"zinc")
-# il plot che è uscito è di tipo spaziale i punti gialli ci vanno ad indicare le zone più inquinate, stiamo analizzando le zone vicine ad un fiume.
+# AM: dal grafico spaziale risultante notiamo che ci sono punti di colori diversi (dal giallo al nero). 
+# AM: il giallo indica le zone più inquinate dell'area vicino al fiume Mose.
 
 
 
@@ -227,48 +236,55 @@ spplot(meuse,"zinc")
 
 #SPATIAL 2
 
-#richiamiamo la libreria "sp"
+# AM: librerie usate
 library(sp)
 
-#carico i dati
+
+# AM: richiamare la libreria "sp"
+library(sp)
+
+# AM: selezionate il dataset di interesse
 data(meuse)
 
-#mostriamo le prime sei righe
+# AM: leggere le prime sei righe
 head(meuse)
 
-#fissare il dataframe in uso 
+# AM: fissare il dataframe in uso 
 attach(meuse)
 
-#specidficazione delle coordinate del dataset
+# AM: specificare le coordinate del dataset
 coordinates(meuse)=~x+y
 
-#creare un grafico sp plot con i dati dello zinco
+# AM: creare un grafico sp plot con i dati dello zinco
 spplot(meuse,"zinc")
 
-#exercize: sp plot dei dati di rame
+# EXERCIZE: sp plot dei dati di rame
 head(meuse)
-names(meuse) #un'altra possibilità per vedere i nomi delle colonne
+# AM: un altro comando che permette di visualizzare i nomi delle colonne è names()
+names(meuse) 
 spplot(meuse,"copper")
 
-#il comando bubble varia il grafico
+# AM: il comando bubble crea un grafico a bolle di dati spaziali, con opzioni per i grafici residui bicolori
 bubble(meuse,"zinc")
 
-#exercize: grafico bubble del rame, evidenziandolo colorandolo di rosso
+# EXERCIZE: grafico bubble del rame, colorato di rosso
 bubble(meuse,"copper",col="red",main="Indice spaziale Rame")
 
 
-#creare nuovo oggetto con nuovi dati rappresentanti foraminiferi e carbon capture
-# array
+# AM: creare nuovo array con nuovi dati rappresentanti foraminiferi e carbon capture
 foram<-c(10,20,35,55,67,80)
 carbon<-c(5,10,30,70,85,99)
 
-#li mettiamo in un grafico
+# AM: visualizzare i nuovi arrays in un grafico
 plot(foram,carbon,col="green",cex=2,pch=19)
 
-#Analizziamo dei dati provenienti dall'esterno sul covid-19
+
+# AM: analisi dei dati provenienti dall'esterno sul covid-19
+# AM: essendo che i dati da analizzare cono all'interno della cartella 'lab', selezionare la working directory
 setwd("C:/lab")
 
-#per leggere la tabella considerando che la prima riga è di testo
+# AM: leggere un file in formato di tabella e creare un nuovo dataframe da questo
+# AM: la funzione head=TRUE indica che quando si importa la tabella, bisogna considerare la prima riga come una stringa di testo
 covid<-read.table("covid_agg.csv",head=TRUE)
 
 
@@ -280,31 +296,42 @@ covid<-read.table("covid_agg.csv",head=TRUE)
 
 ### 4. R codde point patterns
 
+
 # Codice per analisi dei point patterns (pattern legati ai punti)
 
-#impostare una working directory
+# AM: librerie usate
+library(ggplot2)
+library(spatstat)
+library(rgdal)
+
+
+# AM: impostare la working directory della cartella lab
 setwd("C:/lab")  
 
-# importare dati
-#semplifichiamo il nome
+# AM: importare la tabella dei dati relativi al covid
 covid<-read.table("covid_agg.csv",header=TRUE")
-# per vedere la tabella
+# AM: per vedere la tabella si usa head() 
 head(covid)
 
-#creare un grafico per visualizzazione dei dati relazionando i paesi con i casi
+# AM: creare un grafico per visualizzare i dati delli paesi in relazione ai dati dei casi
 plot(covid$country,covid$cases)
-#oppure
+
+#AM: metodo alternativo tramite fissazione del dataset
 attach(covid)
 plot(country,cases)
 
-#disposizione delle etichette
-#las=0 etichette parallele all'asse x e y (parallel labels)
+# AM: disposizione delle etichette, las=n , dove n è un numero da 1 a 4
+
+# AM: las=0 etichette parallele all'asse x e y (parallel labels)
 plot(covid$country,covid$cases,las=0) 
-#las=1 etichette orizzontali (horizontal labels)
+
+# AM: las=1 etichette orizzontali (horizontal labels)
 plot(covid$country,covid$cases,las=1)
-#las=2 etichette perpendicolari all'asse x e y (perpendicular labels)
+
+# AM: las=2 etichette perpendicolari all'asse x e y (perpendicular labels)
 plot(covid$country,covid$cases,las=2)
-#las=3 etichette verticali (vertical labels)
+
+# AM: las=3 etichette verticali (vertical labels)
 plot(covid$country,covid$cases,las=3)
 
 #con il comando cex.axis si cambiano le dimensione delle etichette
