@@ -44,7 +44,7 @@ head(meuse)
 # AM: la funzione names() ci permette di visualizzare i nomi delle colonne del dataset
 names(meuse)
 
-# AM: la funzione summary() è un afunzione generica utilizzata per fornire riepiloghi dei risultati delle varie funzioni di adattamento del modello
+# AM: la funzione summary() è una funzione generica utilizzata per fornire riepiloghi dei risultati delle varie funzioni di adattamento del modello
 summary(meuse)
 
 # AM: la funzione pairs() produce una matrice di scatterplots 
@@ -309,7 +309,7 @@ library(rgdal)
 setwd("C:/lab")  
 
 # AM: importare la tabella dei dati relativi al covid
-covid<-read.table("covid_agg.csv",header=TRUE")
+covid<-read.table("covid_agg.csv",header=TRUE)
 # AM: per vedere la tabella si usa head() 
 head(covid)
 
@@ -385,37 +385,42 @@ plot(d)
 # AM: aggiungere i punti del dataset covids al grafico
 points(covids) 
 
-# salvare il file in .Rdata
+# salvare il file all'interno della cartella lab
 
-# richiamare la work directory e caricare il file .RData salvato
+# richiamare la work directory e caricare il file salvato
 setwd("C:/lab")
 load("point_pattern.RData")
 
-# AM: 
+# AM: con ls() si può vedere il contenuto di un vettore e i nomi degli oggetti presenti
 ls()
 
+# AM: rimandare il grafico della densità relativa ai dati del covid
 plot(d)
 
-#richiamare libraria spatstat
+# AM: plottare la stessa immagine della denistà con la libreria spatstat
+# AM: richiamare quindi la libreria
 library(spatstat)
-#cambiare  i colori, palette, e il numero di livelli specificandolo all'interno di una parentesi esterna al comando
+# AM: si può cambiare la palette di colori da usare nel grafico e il numero di intervalli con il comando colorRampPalette
 cl <- colorRampPalette(c("yellow","orange","red"))(100)
+# AM: plottiamo di nuovo la densità aggiungendo i nuovi colori
 plot(d,col=cl)
 
 
-#EXERCISE: plot della mapa della densità dal verde al blu
+# EXERCISE: plot della mappa della densità dal verde al blu
 cl2 <- colorRampPalette(c("green","turquoise","blue"))(100)
 plot(d,col=cl2)
 
-#completare la mappa aggiungendo i bordi dei paesi
-#istallare e richiamare libreria rgdal
+# completare la mappa aggiungendo i bordi dei paesi
+# AM: installare e richiamare libreria rgdal che fornisce collegamenti alla 'Geospatial' Data Abstraction Library e l'accesso alle operazioni di proiezione e di trasformazione della libreria 'PROJ.4'
 install.packages("rgdal")
 library(rgdal)
 
-#scarichaimo un nuovo pacchetto di dati delle coste in vettore
+# AM: nella cartella lab c'è una sottocartella 'coastlines' contenete i confini di paesi che si devono caricare per essere inseriti nel plot
+setwd("C:/lab/coastlines")
+# AM: usare la funzione readOGR che legge un'origine dati OGR e un layer in un oggetto vettoriale spaziale adatto.
 coastlines<-readOGR("ne_10m_coastline.shp")
 
-#per visualizzare il grafico completo
+# AM: si può procedere alla visualizzazione del grafico completo
 plot(coastlines,add=T)
 
 #EXERCISE: plot della mappa di densità con una nuova colorazione e aggiunta delle coastlines
@@ -450,8 +455,9 @@ plot(coastlines, add=T)
 
 # INTERPOLATION
 
-#exercise: usiamo il vecchio sript sul covid e andiamo a plottare la mappa di densità;
-#carichiamo il vecchio script 
+
+# EXERCIZE: usiamo il vecchio sript sul covid e andiamo a plottare la mappa di densità;
+# AM: si carica lo script relativo ai dati del covid 
 setwd("C:/lab")
 load("point_pattern.RData")
 
@@ -469,43 +475,45 @@ covids <- ppp(lon,lat,c(-180,180),c(-90,90))
 d <- density(covids)
 plot(d)
 
+setwd("C:/lab/coastlines")
 library(rgdal)
 coastlines <- readOGR("ne_10m_coastline.shp")
 plot(coastlines,add=T)
 
-###interpolazione
+### interpolazione
 
 head(covid)
 
-#creiamo dei valori per interpolazione in base ad etichette per ogni paese
-#usiamo il point pattern di ppp, e associamo alla colonna cases del dataset covid
-#se fai attach non si deve scrivere covid$cases ma solo cases
-marks(covids) <- cases
+# AM: bisogna creare dei valori per interpolazione in base alle etichette per ogni paese
+# AM: si usa il point pattern di ppp, e si associa alla colonna cases del dataset covid
+# AM: se si manda prima il comando attach(covid) non si deve scrivere covid$cases ma solo cases
+marks(covids) <- covid$cases
 
-#creiamo la mappa con la funzione smooth
+# AM: viene creata la mappa con la funzione Smooth.
 s <- Smooth(covids)
+# AM: successivamente la si può plottare
 plot(s)
 
-# Exercise: plot(s) with points and coastlines
+# EXERCIZE: plot(s) with points and coastlines
 cl4 <- colorRampPalette(c('violet', 'yellow', 'green')) (100) 
 plot(s,col=cl4,main="Covid cases estimate")
 
 points(covids)
+
 
 setwd("C:/lab/coastlines")
 library(rgdal)
 coastlines <- readOGR("ne_10m_coastline.shp")
 plot(coastlines,add=T)
 
-#stima non della densità di punti ma di casi nel mondo;
-
+# AM: viene fatta una stima non della densità di punti ma di casi nel mondo
+# AM: con la funzione text si aggiunge testo a un grafico. text disegna le stringhe fornite nel vettore labels alle coordinate fornite da x e y.
 text(covid)
 
-#mappa finale, unico fragico con entrambi i plot
-
+# AM: si possono rappresentare le mappe finale in un unico grafico con la funzione rappresentatrice del multiframe
 par(mfrow=c(2,1))
 
-#densità 
+# AM: il primo plot rappresenta la densità 
 library(spatstat)
 cl5 <- colorRampPalette(c('cyan', 'purple', 'red')) (200) 
 plot(d, col=cl5, main="density")
@@ -515,105 +523,114 @@ library(rgdal)
 coastlines <- readOGR("ne_10m_coastline.shp")
 plot(coastlines,add=T)
 
-
-#interpolazione del numero di casi
+# AM: il secondo plot rappresenta l'interpolazione del numero di casi
 cl4 <- colorRampPalette(c('violet', 'yellow', 'green')) (100) 
 plot(s,col=cl4,main="Covid cases estimate")
-
 points(covids)
 
 library(rgdal)
 coastlines <- readOGR("ne_10m_coastline.shp")
 plot(coastlines,add=T)
 
+# AM: con dev.off() vengono chiusi i multiframe
 dev.off()
 
 
 
-#carichiamo un nuovo set di dati messi nella nostra cartella lab riguardanti i dati della tesi di San Marino
+# AM: si lavora con un nuovo set di dati scaricati all'interno della cartella lab riguardanti i dati della tesi su San Marino
 setwd("C:/lab")
 load("Tesi.RData")
+# AM: visualizzare gli elementi all'interno
 ls()
-#per fissare i nostri dati 
+# AM: lavorare con 'Tesi', quindi fissare i dati 
 attach(Tesi)
 
-#visualizziamo le prime 6 righe della tabella
+# AM: visualizzare le prime 6 righe della tabella
 head(Tesi)
 
-#richiamiamo la libraria spatstat
+# AM: utilizzare la libreria spatstat
 library(spatstat)
 
-#facciamo il nostro point pattern
+# AM: si procede alla rappresentazione del point pattern
 
-#per vedere il sommario dei nostri dati 
+# AM: con la funzione summary riepilogo dei risultati delle varie funzioni di adattamento del modello
 summary(Tesi)
- 
-# x varia da 12.42 a 12.46
-# y varia da 43.91 a 43.94
-# point pattern: x,y,c(xmin,xmax),c(ymin,ymax)
+# AM: la longitudine x varia da un minimo di 12.42 ad un massimo di 12.46
+# AM: la latitudine y varia da un minimo di 43.91 ad un massimo di 43.94
+# AM: ricordare che il point pattern ha bisogno di specifiche riguardo la x, la y e i range delle due 
 Tesippp <- ppp(Longitude, Latitude, c(12.41,12.47), c(43.9,43.95))
 
+# AM: calcolare la densità
 dT <- density(Tesippp)
+# AM: plottare il grafico relativo alla densità
 plot(dT)
-cl2 <- colorRampPalette(c("pink","purple","light pink"))
-
-plot(dT,col=cl2)
+# AM: impostare una nuova colorRampPalette e utilizzarla nel plottaggio della densità
+cl2 <- colorRampPalette(c("light blue","blue","violet"))
+plot(dT,col=cl2,main="Density map of San Marino data")
 
 points(Tesippp,col="blue")
 
+# AM: la funzione colors permette di visionare i colori associati ai numeri così da inserirli correttamente nelle funzioni
 colors() 
 
 ####
 
-setwd("C:/lab/")
+setwd("C:/lab")
 load("sanmarino.RData")
 # visualiziamo i dati 
 ls()
 
-# dT è la density map
-# Tesi è un dataset che si trovava all'interno di "Tesi.RData"
-# Tesippp è il point pattern, coordinate della tabella originale 
-# a partire da Tesippp siamo riusciti a fare la dT, mappa di densità
+# AM: dT è la density map
+# AM: Tesi è un set di dati ricavato e salvato all'interno di "Tesi.RData"
+# AM: Tesippp rappresenta il point pattern, con coordinate della tabella originale 
+# AM: partendo da Tesippp si è arrivati a costruire la dT, mappa di densità
 
-plot(dT)
+cl2 <- colorRampPalette(c("light blue","blue","violet"))
+plot(dT,col=cl2,main="Density map of San Marino data")
 points(Tesippp,col="blue")
 
-# caricare la libreria
+# AM: richiamare la libreria spatstat
 library(spatstat)
-# visualizziamo la densità di campionamento
+
+# AM: points permette di visualizzare la densità di campionamento
 points(Tesippp, col="blue")
  
 head(Tesi)
 
-# questa funzione associa i valori della variabile che vogliamo interpolare al point pattern (punti spaziali)
+# AM: la funzione marks associa i valori della variabile che si vuole interpolare al point pattern (punti spaziali)
 marks(Tesippp)<-Tesi$Species_richness
-# ricordare che $ indica la colonna del dataset da considerare
+# AM: ricordare che $ indica la colonna del dataset che si vuole prendere in considerazione
 
-#possiamo procedere con l'interpolazione, la stima. Creare una mappa continua partendo da valori discreti
+# AM: si può dunque procedere con l'interpolazione, ovvero la stima. 
+# AM: creare una mappa continua partendo da valori discreti
 
-#Smooth funzione che stima i valori dove questi non sono stati misurati
+# AM: Smooth è la funzione che stima i valori dove questi non sono stati misurati
 interpol<-Smooth(Tesippp)
 
-# rappresentare con la mappa
+# AM: plottare la interpol
 plot(interpol)
 points(Tesippp,col="blue")
-# maggiore richchezza nella parte Sud-Est e nella parte centrale
+# AM: dal plot risualtante si può dedurre che si ha una maggiore ricchezza di dati nella parte Sud-Est e nella parte centrale del territorio di analisi
 
-
+# AM: si prodegue metendo i confini del territorio di San Marino, caricando l'immagine vettoriale con la libreria rgdal
 setwd("C:/lab")
-# libreria per utilizzare qualsiasi tipo di file vettoriale
+# AM: libreria per utilizzare qualsiasi tipo di file vettoriale
 library(rgdal)
-# possiamo leggere il file .shp
+# AM: è possibile ora convertire il file .shp 
 sanmarino<-readOGR("San_Marino.shp")
 
-# e ora plottarlo
-plot(sanmarino) #visualizziamo il territorio di San Marino
-plot(interpol,add=T) #add=T sovrappone la mappa dell'interpolazione alla mappa di San Marino
-points(Tesippp,col="blue") #sovrappone i punti alle mappe di prima
+# AM: e ora plottarlo
+# AM: visualizzare il territorio si San Marino
+plot(sanmarino)
+# AM: add=T sta a significare che la mappa di interpolazione viene sovrapposta alla mappa di San Marino
+plot(interpol,add=T) 
+# AM: con points vengono aggiunti i punti alle mappe
+points(Tesippp,col="blue") 
+# AM: si rimanda il comando plot per far in modo che i confini di San Marino siano ben visibili anche al di sopra della mappa di interpolazione
 plot(sanmarino,add=T) #per far vedere di nuovo i confini di San Marino
 
 
-## Exercise: plot multiframe di densità e interpolazione
+# EXERCIZE: plot multiframe di densità e interpolazione strutturato in due righe e una colonna
 par(mfrow=c(2,1))
 
 plot(dT,main="Density of points")
@@ -622,7 +639,7 @@ points(Tesippp,col="blue")
 plot(interpol,main="Estimate of species richness")
 points(Tesippp,col="blue")
 
-# esercizio: due colonne e una riga
+# EXERCIZE: plot multiframe di densità e interpolazione strutturato in due colonne e una riga
 par(mfrow=c(1,2))
 
 plot(dT,main="Density of points")
