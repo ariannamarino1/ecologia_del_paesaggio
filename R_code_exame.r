@@ -655,26 +655,35 @@ points(Tesippp,col="blue")
 ##################################################
 
 
+
 ### 5. R code teleril
 # telerilevamento
 
 # codice R per le immagini satellitari
 
-#istallare librerie che ci serviranno per lavorare con i nostri dati
+# AM: librerie
+library(raster)
+library(RStoolbox)
 
+# AM: installare le librerie che serviranno per lavorare con i dati
+# AM: pacchetto raster per la lettura, la scrittura, la manipolazone, l'analisi e la modellizzazione di dati spaziali gridded
 install.packages("raster")
-
+# AM: pacchetto R Stool box per l'analisi dei dati mediante il telerilevamento, come il calcolo di indici spettrali, la trasformazione dei componeneti principali, la classificazione non supervisionata e supervisionata o l'analisi di coperture frazionate. 
 install.packages("RStoolbox")
 
-#richiamare la libreria raster
+# AM: selezionare la WD. Lavorare con i dati all'interno della cartella p224r63 che sono relativi all'anno 1988 e all'anno 2011
+setwd("C:/lab/p224r63")
+# AM: richiamare la libreria raster
 library(raster)
 
-#scaricare un pacchetto di dati e rinominare un file che ci servirà per il nostro lavoro
+# AM: rinominare il file che ci servirà per il nostro lavoro
+# AM: la funzione brick crea un oggetto RasterBrick, ovvero un oggetto multistrato. Sono in genere creati da un file multi-layer (banda)
 p224r63_2011 <- brick("p224r63_2011_masked.grd")
 
-#creare il grafico dell'immagine satellitare
+# AM: una volta creto l'oggetto RasterBrick, lo si può plottare
 plot(p224r63_2011)
 
+# AM: risualtano 7 plot diversi, corrispondenti a 7 bande diverse:
 # B1: blue
 # B2: green
 # B3: red
@@ -688,8 +697,7 @@ plot(p224r63_2011)
 ###
 
 # day 2
-setwd("C:/lab") # windows
-
+setwd("C:/lab") 
 load("teleril.RData")
 
 ls()
