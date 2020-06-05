@@ -334,53 +334,64 @@ plot(covid$country,covid$cases,las=2)
 # AM: las=3 etichette verticali (vertical labels)
 plot(covid$country,covid$cases,las=3)
 
-#con il comando cex.axis si cambiano le dimensione delle etichette
+# AM: per cambiare le dimensioni delle etichette degli assi si usa il comando cex.axis
 plot(covid$country,covid$cases,las=3,cex.axis=0.3)
 
 
-#installare la libreria ggplot2 e richiamarla
+# AM: installare la libreria ggplot2 e richiamarla
+# AM: ggplot2 è un sistema di creazione grafica basato sulla 'grammatica della grafica'. ggplot2 mappa le variabili per l'estetica e cura i dettagli
+install.packages(ggplot2)
 library(ggplot2)
 
-#prendiamo i dati dalla libreria ggplot2
+# AM: si prende il dataframe 'mpg' dalla libreria ggplot2, contenente osservazioni raccolte dalla US Environmental Protection Agency su 38 modelli di auto.
 data(mpg)
 
-#mostriamo le prime sei righe
+# AM: si mostrano le prime sei righe
 head(mpg)
 
-#creare un plot del nuovo dataset mpg, modificare l'estetiza (aes) e il tipo di geometria (geom_)
-#geom_point per visualizzare punti
+# AM: creare un plot del nuovo dataset mpg, modificare l'estetica (aes) e il tipo di geometria (geom_)
+# AM: aes() è una funzione di quotazione. Ciò signiica che i suoi imput sono quotati per essere valutati nel contesto dei dati.
+
+# AM: per visualizzare dei punti si usa geom_point 
 ggplot(mpg,aes(x=displ,y=hwy))+geom_point()
-#geom_line per visualizzare linee
+
+# AM: per visualizzare delle linee si usa geom_line 
 ggplot(mpg,aes(x=displ,y=hwy))+geom_line()
-#geom_polygon per visualizzare poligoni
+
+# AM: per visualizzare dei poligoni si usa geom_polygon 
 ggplot(mpg,aes(x=displ,y=hwy))+geom_polygon()
 
-#per avere un grafco gg plot di covid
+
+# AM: si applica la libreria ggplot2 ai dati relativi al covid e si ottine un grafco gg plot
 ggplot(covid,aes(x=lon,y=lat,size=cases))+geom_point()
 
 
-#installare e richiamare la librery spatstat
+# AM: installare e richiamare la libreria spatstat
+# AM: la libreria 'spatstat' mostra anlisi dei modelli dei punti spaziali, modellazione, simulazione e test. Contiene oltre 2000 funzioni per tracciare i dati spaziali, analisi esplorativa dei dati, modellazione, simulazione, campionamento spaziale, diagnostica dei modelli e inferenza formale.
+install.packages(spatstat)
 library(spatstat)
 attach(covid)
 
-#con il comando ppp si crea un nuovo dataset utile per l'analisi spaziale
-#ppp(x.coordinates,y.coordinates,x.range,y.range)
+# AM: il comando ppp crea un oggetto di classe 'ppp' che rappresenta un insieme di dati del pattern puntiforme nel piano bidimensionale
+# AM: ppp(x.coordinates,y.coordinates,x.range,y.range), bisogna specificare cosa rappresentano le x e le y e definirle in un range
 covids<-ppp(lon,lat,c(-180,180),c(-90,90))   
 
-#calcoliamo la densità e la rinominiamo d
+# AM: calcolare la densità con il comando density()
 d<-density(covids)
 
-#grafico della densità
+# AM: una volta assegnato un nome alla dentità (d), si può procedere alla sua rappresentazione grafica
 plot(d)
 
-#aggiungere i punti covids al grafico
+# AM: aggiungere i punti del dataset covids al grafico
 points(covids) 
 
-#salvare il file in .Rdata
-#richiamare la work directory e caricare il file .RData salvato
+# salvare il file in .Rdata
+
+# richiamare la work directory e caricare il file .RData salvato
 setwd("C:/lab")
 load("point_pattern.RData")
 
+# AM: 
 ls()
 
 plot(d)
