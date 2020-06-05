@@ -389,7 +389,7 @@ points(covids)
 
 # richiamare la work directory e caricare il file salvato
 setwd("C:/lab")
-load("point_pattern.RData")
+load("C:/lab/point_pattern.RData")
 
 # AM: con ls() si può vedere il contenuto di un vettore e i nomi degli oggetti presenti
 ls()
@@ -459,7 +459,7 @@ plot(coastlines, add=T)
 # EXERCISE: usiamo il vecchio sript sul covid e andiamo a plottare la mappa di densità;
 # AM: si carica lo script relativo ai dati del covid 
 setwd("C:/lab")
-load("point_pattern.RData")
+load("C:/lab/point_pattern.RData")
 
 point_pattern <- read.table("C:/lab/point_pattern.RData", quote="\"")
 ls()
@@ -539,7 +539,7 @@ dev.off()
 
 # AM: si lavora con un nuovo set di dati scaricati all'interno della cartella lab riguardanti i dati della tesi su San Marino
 setwd("C:/lab")
-load("Tesi.RData")
+load("C:/lab/Tesi.RData")
 # AM: visualizzare gli elementi all'interno
 ls()
 # AM: lavorare con 'Tesi', quindi fissare i dati 
@@ -576,7 +576,7 @@ colors()
 ####
 
 setwd("C:/lab")
-load("sanmarino.RData")
+load("C:/lab/sanmarino.RData")
 # visualiziamo i dati 
 ls()
 
@@ -801,36 +801,34 @@ plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
 plotRGB(p224r63_2011, r=3, g=2, b=4, stretch="Lin")
 
 
-#Landcover
+# Landcover
 
-#settiamo la nostra directory
-setwd("c:/lab")
+# AM: impostare la work directory
+setwd("C:/lab/p224r63")
 
-#richiamiamo la libreria raster
+# AM: usare la libreria raster
 library(raster)
 
-#recuperiamo le immagini che sono di nostro interesse contenute nella nostra working directory
+# AM: recuperare e importare le immagini che di interesse contenute nella working directory
 p224r63_2011 <- brick("p224r63_2011_masked.grd")
 
-#chiamiamo la libreria RStoolbox
+# AM: richiamre libreria RStoolbox
 library(RStoolbox)
 
+# AM: plottare l'immagine in R G B
 plotRGB(p224r63_2011,r=4,g=3,b=2,stretch="Lin")
 
-#unsuperClass, l'mmagine di partenza e numero di classi 
-
+# AM: classificazione senza supervisione dei dati raster con unsuperClass, specificando il numero di classi
 p224r63_2011c <- unsuperClass(p224r63_2011,nClasses = 4)
 
-#visualizziamo ciò che abbiamo svolto, informazione sull'immagine; si unisce la mappa al modello 
+# AM: visualizzando il nuovo data si hanno informazioni sull'immagine. A questo modello viene aggiunta anche la mappa 
 p224r63_2011c
 
-#plottiamo la nostra mappa, i colori interi ci mostrano le nostre 4 classi;
+# AM: plottando la mappa, specificata con il $, si avranno 4 colori a dimostrazione delle quattro classi specificate 
 plot(p224r63_2011c$map)
 
-#cambiamo i colori del nostro grafico così da avere una migliore interpretazione del grafico
-
+# AM: impostare una nuova palette che permette una migiore visualizzazione e interpretazione del grafico
 clclass <- colorRampPalette(c('green',"red","blue","black"))(100)
-
 plot(p224r63_2011c$map,col=clclass)
 
 
@@ -843,21 +841,22 @@ plot(p224r63_2011c$map,col=clclass)
 library(raster)
 
 #settiamo la working directory
-setwd("C:/lab")
+setwd("C:/lab/p224r63")
 
-#questa volta useremo un altra immagine per il nostro telerilevamento
-#NB. abbiamo messo nella directory un set di dati che andremo ad usare durante tutto il nostro lavoro su R
-#applichiamo la funzione brick per riuscire a rinominare e portare in R la nostra immagine di interesse
+# AM: lavoro di telerilevamento con l'immagine relativa al 1988 
+# AM: importare l'immagine con la funzione brick
 
-load("teleril.RData")
+load("C:/lab/teleril.RData")
 
-# list
+# AM: visualizzare gli oggetti 
 ls()
+p224r63_2011 <- brick("p224r63_2011_masked.grd") 
 
 p224r63_1988 <- brick("p224r63_1988_masked.grd")
 
-#ci creiamo un plot dell'oggetto del 1988
-#il satellite lensat del 1988 vediamo le bande del blu, rosso, verde, e infrarosso.
+# AM: creare il plot dell'oggetto del 1988
+# AM: questa immagine è stata fornita dal satellite lensat del 1988
+# AM: come per l'immagine del 2011, anche questa ha 7 bande corrispondenti a 7 colori
 # B1: blue
 # B2: green
 # B3: red
@@ -866,90 +865,91 @@ p224r63_1988 <- brick("p224r63_1988_masked.grd")
 # B6: thermal infrared
 # B7: medium infrared
 
+# AM: plottaggio dell'oggetto del 1988
 plot(p224r63_1988)
 
-#per vedere i nomi di interesse
+# AM: visualizzare i campi di interesse
 names(p224r63_1988)
 
-#per vedere i nostri grafici tutti assieme usiamo il multiframe
+# AM: usare il multiframe per visualizzare i grafici della banda del blu (1), del verde (2), del rosso (3) e del vicino all'infrarosso (4) iniseme
 par(mfrow=c(2,2))
-
-#blue
+# blue
 clb <- colorRampPalette(c("dark blue","blue","light blue"))(100)
 plot(p224r63_1988$B1_sre,col=clb)
-
-#green
+# green
 clg <- colorRampPalette(c("dark green","green","light green"))(100)
 plot(p224r63_1988$B2_sre,col=clg)
-
-#red
+# red
 clr <- colorRampPalette(c("red","orange","yellow"))(100)
 plot(p224r63_1988$B3_sre,col=clr)
-
-#nir
+# nir
 clnir <- colorRampPalette(c("purple","pink","light pink"))(100)
 plot(p224r63_1988$B4_sre,col=clnir)
 
-#per chiudere la finestra attuale useremo:
-
+# AM: per chiudere la finestra attuale 
 dev.off()
 
-#creiamo un plot RGB in True colours o natural
 
+# AM: creare il plot RGB in True colours o natural
 plotRGB(p224r63_1988,r=3,g=2,b=1,stretch="Lin")
 
-#essendo il grafico non comprensibile useremo la scala cromatica dei colori falsi
-#exercise: creiamo il plot con la componente infrarosso nella componente rossa;
-#in questo caso i colori vengono definiti False colours;
-
+# AM: essendo il grafico non comprensibile si usa la scala cromatica dei colori falsi
+# EXERCISE: creiamo il plot con la componente infrarosso nella componente rossa
+# AM: in questo caso i colori vengono definiti False colours
 plotRGB(p224r63_1988,r=4,g=3,b=2,stretch="Lin")
 
-#vediamo come è cambiata nel corso del tempo la nostra immagine mettendo a confronto il 2011 con il 1988;
-
+p224r63_2011 <- brick("p224r63_2011_masked.grd")
+# AM: mettere a confronto le immagini del 1988 e del 2011 per veder come è cambiata la situazione nel tempo
 par(mfrow=c(2,1))
-plotRGB(p224r63_2011,r=4,g=3,b=2,stretch="Lin")
 plotRGB(p224r63_1988,r=4,g=3,b=2,stretch="Lin")
-
+plotRGB(p224r63_2011,r=4,g=3,b=2,stretch="Lin")
+# AM: chiudere il multiframe
 dev.off()
-#l'agricolo è molto più sviluppata nel 2011
-#infrarosso vicino sono le piante
-#le zolle di terra sono bianche o celeste
 
-#possiamo calcolare l'indice di salute della vegetazione, ricordiamo che è possibile in quanto le foglie sane riescono a riflettere l'infrarosso 
-#DVI(Difference Vegetation Index) sarà l'indice che useremo noi; 
+# AM: paragonando le due situazioni si nota che il territorio agricolo è molto più sviluppato nel 2011
+# AM: il colore della banda 4 (near infrared) è rappresentato dalle piante
+# AM: e le zolle di terra sono bianche o celeste
 
-#DVI=NIR-RED, avremo dei risultati diversi in base alla salute delle piante; 
-#sana = NIR alto
-#Malata = RED alto 
 
-#div1988=nir1988-red1988
-#per legare si usa il simbolo $
+# AM: si può calcolare calcolare l'indice di salute della vegetazione
+# AM: ricordare che calcolare tale indice è possibile in quanto le foglie sane riescono a riflettere l'infrarosso 
+# AM: DVI(Difference Vegetation Index) sarà l'indice che useremo noi
 
+# AM: DVI=NIR-RED, si avranno dei risultati diversi in base alla salute delle piante
+# AM: pianta sana = NIR alto
+# AM: pianta malata = RED alto 
+
+# 1988
+# div1988=nir1988-red1988
+# AM: per prendere la colonna relativa si usa il $
 dvi1988 <- p224r63_1988$B4_sre-p224r63_1988$B3_sre
 
-#vediamo il plot del DVI
+# AM: plot del DVI 1988
 plot(dvi1988)
 
-#facciamo lo stesso per quello del 2011
 
+# 2011
+# div2011=nir2011-red2011
 dvi2011 <- p224r63_2011$B4_sre-p224r63_2011$B3_sre
 plot(dvi2011)
 
-#Per cambiare colore si userà il comando color ramp palette
+# AM: è possibile cambiare il colore sempre utilizzando la color Ramp Palette
 cldvi11 <- colorRampPalette(c('dark green','green','light green'))(100)
 plot(dvi2011,col=cldvi11)
 
 
-#adesso abbiamo i DVI dei 2 anni, se facciamo la differenza tra i 2 anni vedremo quanto è stato il cambiamento della vegetazione, se il valore del 2011 è negativo vuol dire che la vegetazione stava meglio nel 1988
-#multitemporal analysis
+# AM: si hanno gli indici DVI relativi ai due differenti anni
+# AM: facendo la differenza tra i 2 anni si vedrà di quanto è stato il cambiamento della vegetazione
+# AM: se il valore del 2011 è negativo vuol dire che la vegetazione è peggiorata rispetto al 1988
+# AM: multitemporal analysis
 dfdvi <- dvi2011-dvi1988
 
-# creiamo l' immagine che ci mostra le zone dove le piante sono state in maggiore stress
+# AM: si crea l'immagine realtiva alle zone dove le piante hanno subito maggiore stress
 plot(dfdvi)
 cldfdvi <- colorRampPalette(c('red','white','blue'))(100)
 plot(dfdvi,col=cldfdvi)
 
-#visualizzare tutti i grafici assieme usando un multiframe di immagine di 1988. 2011 e differenza di indice 
+# AM: multiframe per visualizzare tutti i grafici dell'immagine del 1988, dell'immagine del 2011 e della differenza di indice DVI
 par(mfrow=c(3,1))
 plotRGB(p224r63_1988,r=4,g=3,b=2,stretch="Lin")
 plotRGB(p224r63_2011,r=4,g=3,b=2,stretch="Lin")
@@ -957,59 +957,65 @@ plot(dfdvi,col=cldfdvi)
 
 dev.off()
 
-#cambiare la risoluzione di un immagine, la funione che si usa è aggregate
+# AM: cambiare la risoluzione di un immagine, la funione che si usa è aggregate che crea un nuovo RasterLayer o RasterBrick con una risoluzione inferiore, quindi celle più grandi
 p224r63_2011lr <- aggregate(p224r63_2011,fact=10)
-# se fact o factor viene settato uguale a 10 usiamo una scala 10 volte maggiore 
+# AM: se fact o factor viene settato uguale a 10 usiamo una scala 10 volte maggiore 
 
-#vediamo le caratteriestiche dell'immagine originale
+# AM: caratteriestiche dell'immagine originale
 p224r63_2011
 
-#vediamo le caratteristiche della nuova immagine
+# AM: caratteristiche della nuova immagine
 p224r63_2011lr
 
-#mettiamo i 2 grafici a confronto;
+# AM: multiframe per confronto dei due grafici
 par(mfrow=c(2,1))
 plotRGB(p224r63_2011,r=4,g=3,b=2,stretch="Lin")
 plotRGB(p224r63_2011lr,r=4,g=3,b=2,stretch="Lin")
 dev.off()
 
-#cambiamo il fattore in 50, lower resolution
+# AM: cambiamo il fattore in 50, lower resolution
 p224r63_2011lr50 <- aggregate(p224r63_2011,fact=50)
-#visualizziamo le informazioni dell'immagine
+# AM: visualizzare le informazioni dell'immagine
 p224r63_2011lr50
 
-#creiamo il nostro grafico mettendoli sempre in correlazione;
+# AM: multiframe comparativo dei grafici ottenuti
 par(mfrow=c(3,1))
 plotRGB(p224r63_2011,r=4,g=3,b=2,stretch="Lin")
 plotRGB(p224r63_2011lr,r=4,g=3,b=2,stretch="Lin")
 plotRGB(p224r63_2011lr50,r=4,g=3,b=2,stretch="Lin")
 dev.off()
 
-#facciamo un dvi della nuova immagine 2011
-dvi2011lr50 <- p224r63_2011lr2$B4_sre - p224r63_2011lr2$B3_sre
+# AM: calcolare l'indice DVI della nuova immagine a bassa risoluzione del 2011
+dvi2011lr50 <- p224r63_2011lr$B4_sre - p224r63_2011lr$B3_sre
 plot(dvi2011lr50)
 
-#diminuiamo la risoluzione del 1988
+# AM: cambiare la risoluzione dell'immagine del 1988
+p224r63_1988lr <- aggregate(p224r63_1988,fact=10)
+# AM: caratteriestiche dell'immagine originale
+p224r63_1988
+# AM: caratteristiche della nuova immagine
+p224r63_1988lr
+# AM: diminuire la risoluzione di 50 dell'immagine del 1988 sempre con aggregate
 p224r63_1988lr50 <- aggregate(p224r63_1988,fact=50)
 
-#facciamo un dvi della nuava immagine 1988
-dvi1988lr50 <- p224r63_1988lr2$B4_sre - p224r63_1988lr2$B3_sre
+# AM: creare l'indice DVI della nuova immagine 1988
+dvi1988lr50 <- p224r63_1988lr$B4_sre - p224r63_1988lr$B3_sre
 plot(dvi1988lr50)
 
-#facciamo la differenza dei DVI dei due anni a bassa risoluzione
+# AM: ottenere la differenza dei DVI dei due anni a bassa risoluzione
 dfdvilr50 <- dvi2011lr50-dvi1988lr50
 
-#creiamo la nostra immagine:
+# AM: impostare la color Ramp Palette per l'immagine
 cldifdvi <- colorRampPalette(c('red','white','blue'))(100)
 plot(dfdvilr50,col=cldfdvi)
 
-#multiframe del totale 
+# AM: multiframe conforntando i DVI con le diverse risoluzioni 
 par(mfrow=c(2,1))
 plot(dfdvi,col=cldfdvi)
 plot(dfdvilr50,col=cldfdvi)
 dev.off()
 
-#é importante usare la scala giusta per evitare di non riuscire a distinguere le microdivresità presente nel grafico;
+# AM: é importante usare la scala giusta per evitare di non riuscire a distinguere le microdivresità presente nel grafico
 
 
 
