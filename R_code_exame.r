@@ -172,7 +172,7 @@ attach(meuse)
 plot(cadmium,lead,main="Relazione cadmio piombo",col="blue",pch=19,cex=2,xlab="Cadmio",ylab="Piombo")
 
 
-# EXERCIZE: plot del rame e zinco (copper e zinc) con simbolo triangolo (17) e colore verde
+# EXERCISE: plot del rame e zinco (copper e zinc) con simbolo triangolo (17) e colore verde
 plot(copper,zinc,pch=17,col="green",cex=2,main="Relazione copper zinc")
 
 # AM: mettere le etichette relative alle ascisse e alle ordinate
@@ -258,7 +258,7 @@ coordinates(meuse)=~x+y
 # AM: creare un grafico sp plot con i dati dello zinco
 spplot(meuse,"zinc")
 
-# EXERCIZE: sp plot dei dati di rame
+# EXERCISE: sp plot dei dati di rame
 head(meuse)
 # AM: un altro comando che permette di visualizzare i nomi delle colonne è names()
 names(meuse) 
@@ -267,7 +267,7 @@ spplot(meuse,"copper")
 # AM: il comando bubble crea un grafico a bolle di dati spaziali, con opzioni per i grafici residui bicolori
 bubble(meuse,"zinc")
 
-# EXERCIZE: grafico bubble del rame, colorato di rosso
+# EXERCISE: grafico bubble del rame, colorato di rosso
 bubble(meuse,"copper",col="red",main="Indice spaziale Rame")
 
 
@@ -316,7 +316,7 @@ head(covid)
 # AM: creare un grafico per visualizzare i dati delli paesi in relazione ai dati dei casi
 plot(covid$country,covid$cases)
 
-#AM: metodo alternativo tramite fissazione del dataset
+# AM: metodo alternativo tramite fissazione del dataset
 attach(covid)
 plot(country,cases)
 
@@ -456,7 +456,7 @@ plot(coastlines, add=T)
 # INTERPOLATION
 
 
-# EXERCIZE: usiamo il vecchio sript sul covid e andiamo a plottare la mappa di densità;
+# EXERCISE: usiamo il vecchio sript sul covid e andiamo a plottare la mappa di densità;
 # AM: si carica lo script relativo ai dati del covid 
 setwd("C:/lab")
 load("point_pattern.RData")
@@ -494,7 +494,7 @@ s <- Smooth(covids)
 # AM: successivamente la si può plottare
 plot(s)
 
-# EXERCIZE: plot(s) with points and coastlines
+# EXERCISE: plot(s) with points and coastlines
 cl4 <- colorRampPalette(c('violet', 'yellow', 'green')) (100) 
 plot(s,col=cl4,main="Covid cases estimate")
 
@@ -630,7 +630,7 @@ points(Tesippp,col="blue")
 plot(sanmarino,add=T) #per far vedere di nuovo i confini di San Marino
 
 
-# EXERCIZE: plot multiframe di densità e interpolazione strutturato in due righe e una colonna
+# EXERCISE: plot multiframe di densità e interpolazione strutturato in due righe e una colonna
 par(mfrow=c(2,1))
 
 plot(dT,main="Density of points")
@@ -639,7 +639,7 @@ points(Tesippp,col="blue")
 plot(interpol,main="Estimate of species richness")
 points(Tesippp,col="blue")
 
-# EXERCIZE: plot multiframe di densità e interpolazione strutturato in due colonne e una riga
+# EXERCISE: plot multiframe di densità e interpolazione strutturato in due colonne e una riga
 par(mfrow=c(1,2))
 
 plot(dT,main="Density of points")
@@ -698,100 +698,106 @@ plot(p224r63_2011)
 
 # day 2
 setwd("C:/lab") 
-load("teleril.RData")
+load("C:/lab/teleril.RData")
 
 ls()
-# [1] "p224r63"      "p224r63_2011"
 
 library(raster)
 plot(p224r63_2011)
 
-#per cambiare la scala cromatica
+# AM: impostare una sola scala cromatica per tutto il plot
 cl <- colorRampPalette(c("black","grey","light grey"))(100) 
-#con cl abbiamo chiamato il comando precedente che dobbiamo aggiungere al grafico
+# AM: e lo si aggiunge al comando del grafico
 plot(p224r63_2011,col=cl)
 
-#modifica delle scale cormatiche
+# AM: modifica delle scale cormatiche. Non più 100 intervalli ma 5
 cllow <- colorRampPalette(c("black","grey","light grey"))(5) 
-#inserirle nel grafico
+# AM: scala cromatica diversificata nel grafico
 plot(p224r63_2011,col=cllow)
 
+# AM: si possiono visionare i nomi di un oggetto con la funzione names
 names(p224r63_2011)
 #[1] "B1_sre" "B2_sre" "B3_sre" "B4_sre" "B5_sre" "B6_bt"  "B7_sre"
 
-#cambiamo in scala di blu la banda blu
-clb <- colorRampPalette(c("dark blue","blue","light blue"))(100)
-#attach data frame non funziona con raster 
-#visualizzare solo la banda del blu all'interno del grafico
-plot(p224r63_2011$B1_sre,col=clb)
-# $ colonna legato al dataset
 
-# Exercise: plottare la banda dell'infrarosso vicino con colorRampPalette che varia dal rosso, all'arancione, al giallo
+# AM: si ricorda che le bande rappresentano i colori:
+# B1: blue
+# B2: green
+# B3: red
+# B4: near infrared (nir)
+# B5: medium infrared
+# B6: thermal infrared
+# B7: medium infrared
+
+# AM: cambiare la banda blu (banda 1) con una color palette in scala di blu
+clb <- colorRampPalette(c("dark blue","blue","light blue"))(100)
+# AM: la funzione attach  relativa al fissaggio di un data frame non funziona con il pacchetto raster ma si deve usare $ 
+# AM: con la nuova palette si visualizza solo la banda del blu all'interno del grafico
+plot(p224r63_2011$B1_sre,col=clb)
+
+
+# EXERCISE: plottare la banda dell'infrarosso vicino con colorRampPalette che varia dal rosso, all'arancione, al giallo
 clnir <- colorRampPalette(c('red','orange','yellow'))(100)
 plot(p224r63_2011$B4_sre, col=clnir)
 
-# multiframe
+# AM: multiframe dei plot in diverse bande di colore
 par(mfrow=c(2,2))
-
-#blue
+# blue
 clb <- colorRampPalette(c("dark blue","blue","light blue"))(100)
 plot(p224r63_2011$B1_sre,col=clb)
-
-#green
+# green
 clg <- colorRampPalette(c("dark green","green","light green"))(100)
 plot(p224r63_2011$B2_sre,col=clg)
-
-#red
+# red
 clr <- colorRampPalette(c("red","orange","yellow"))(100)
 plot(p224r63_2011$B3_sre,col=clr)
-
-#infrared
+# infrared (nir)
 clir <- colorRampPalette(c("purple","pink","light pink"))(100)
 plot(p224r63_2011$B4_sre,col=clir)
 
-#chiusura delle immagini plottate
+# AM: chiusura delle immagini plottate
 dev.off()
 
-#colori naturali, 3 componenti R G B, creiamo un plot con questa gamma di colore 
+
+# AM: la funzione plotRGB crea un plot rosso-verde-blu basato su tre livelli. Quindi tre strati sono combinati in modo tale da rappresentare il canale rosso, verde e blu. 
+# AM: Questa funzione può essere utilizzata per creare "immagini a colori vere (o false)" da Landsat e altre immagini satellitari multi-banda.
 # 3 bande alla volta R= red G= green B= blue
-#comando
 plotRGB(p224r63_2011,r=3,g=2,b=1)
 
-# B1: blue - 1
-# B2: green - 2
-# B3: red - 3
-# B4: near infrared (nir) - 4 
+# B1: blue = 1
+# B2: green = 2
+# B3: red = 3
+# B4: near infrared (nir) = 4 
 
-#essendo il risultato nero, usiamo la funzione stretch="lin"
+# AM: essendo il risultato nero, usiamo la funzione stretch="lin", che permette di aumentare il contrasto dell'immagine
 plotRGB(p224r63_2011,r=3,g=2,b=1, stretch="lin")
 
-#per visualizzare meglio il nostro grafico risultante cambiamo le bande inserendo l'infrarosso 
+# AM: affinchè il grafico risuli più leggible, si aggiunge la banda dell'infrarosso
 plotRGB(p224r63_2011,r=4,g=3,b=2, stretch="lin")
-#essendo le piante riflettenti assumeranno il colore rosso
-#il celeste indicherà le zone agricole non coltivata
-#il rosa le zone agricole coltivate
+# AM: le piante sono molto riflettenti e assumono il colore rosso
+# AM: il celeste indica le zone agricole non coltivata
+# AM: il rosa rappresenta le zone agricole coltivate
 
-#salvare l'immagine della mappa ottenuta
+# AM: salvare l'immagine della mappa ottenuta
 pdf("primografico.pdf") # png("primografico.png")
 plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
 dev.off()
 
 
-#visualizzare i 2 grafici ottenuti usando la funzione multiframe
+# AM: con il multiframe possono essere confrontati i due grafici ottenuti con le bande diverse
 par(mfrow=c(2,1))
-
 plotRGB(p224r63_2011,r=3,g=2,b=1, stretch="lin")
 plotRGB(p224r63_2011,r=4,g=3,b=2, stretch="lin")
 
 dev.off()
 
-# nir nella compnente R(Red)
+# EXERCISE: nir nella compnente R(Red)
 plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
 
-# Exercise: infrarosso nella componente green
+# EXERCISE: infrarosso nella componente green
 plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
 
-# Exercise: infrarosso nella componente blue
+# EXERCISE: infrarosso nella componente blue
 plotRGB(p224r63_2011, r=3, g=2, b=4, stretch="Lin")
 
 
