@@ -1024,69 +1024,85 @@ dev.off()
 ##################################################
 
 ### 7. R code multitemp
-# Lezione 29 Aprile
+
 # R code analisi multitemporale di variazione della land cover
 
-# settiamo la WD
+# AM: librerie
+library(raster)
+library(RStoolbox)
+library(ggplot2)
+library(gridExtra)
+
+
+# AM: impostare la Working Directory
 setwd("C:/lab")
 
-# richiamiamo la libreria raster
+# AM: richiamare la libreria raster
 library(raster)
 
-# brick() è una funzione di raster che permette di caricare dei dati dall'esterno, caricando tutte le singole bande se si stratta di una immagine satellitare
+# AM: brick() è una funzione del pacchetto raster che permette di caricare dati dall'esterno, caricando tutte le singole bande se si stratta di una immagine satellitare
+# AM: la funzione crea un oggetto RasterBrick, ossia un oggetto raster multistrato, in genere creati da un file multi-layer
 defor1<-brick("defor1_.jpg")
 defor2<-brick("defor2_.jpg")
 
-defor1 # nel dataet abbiamo 3 bande
-#names: defor1_.1, defor1_.2, defor1_.3 
+# AM: controllare le informazioni di defor1
+defor1
+# AM: all'interno del dataset, nella riga 'names' si hanno tre bande
+# AM: names: defor1_.1, defor1_.2, defor1_.3 
 # defor1_.1 = NIR
 # defor1_.2 = red
 # defor1_.3 = green
 
-# plottaggio RGB, associamo ogni singola banda ad una componente rgb
-# banda del rosso alla componente NIR, banda del green alla componente red, banda del blu alla componente green
+# AM: si procede con il plot RGB, associando ogni banda ad una componente rgb
+# AM: banda del rosso alla componente NIR (r=1)
+# AM: banda del green alla componente red (g=2)
+# AM: banda del blu alla componente green (b=3)
 
 plotRGB(defor1,r=1,g=2,b=3,stretch="Lin")
 
-# Exercize plot della seconda data
+# EXERCISE: plot della seconda data
 plotRGB(defor2,r=1,g=2,b=3,stretch="Lin")
 
-#plot delle due immagini, confronto della foreste pluviale in due momenti diversi, prima e dopo la deforestazione
+# AM: multiframe per comparare le due immagini, confronto della foreste pluviale in due momenti diversi, prima e dopo la deforestazione
 par(mfrow=c(2,1))
 plotRGB(defor1,r=1,g=2,b=3,stretch="Lin")
 plotRGB(defor2,r=1,g=2,b=3,stretch="Lin")
 
 dev.off()
 
-# per la classificazione si usa unsuperClass che significa classificazione non supervisionata, cioè non diamo dei training set al pc
-# per far ciò dobbiamo caricare un'atra libreria
+# AM: per la classificazione viene usato il comando unsuperClass della libreria RStoolbox
+# AM: unsuperClass è la classificazione non supervisionata, cioè non vengono date dei training set al pc
+# AM: caricare dunque la libreria utile
 library(RStoolbox)
 
+# AM: classificazione
 d1c<-unsuperClass(defor1,nClasses=2)
-# in d1c abbiamo la mappa
+# AM: tra i risultati della classificazione si ha il valore 'map'
+# AM: si valuta quindi questo valore
 d1c$map
-# facciamo il plot
+# AM: e si procede con il plottaggio
 plot(d1c$map)
 
+# AM: viene creata una color Ramp palette per definire meglio le variazioni, e la si inserisce nel plot
 cl1<-colorRampPalette(c('green','blue'))(100)
 plot(d1c$map,col=cl1)
 
-# Excersize: classificare con due classi l'immagine satellitare defor2
-# consideriamo adesso la seconda immagine
+# EXERCISE: classificare con due classi l'immagine satellitare defor2
+# AM: si lavora con defor2, relativa al tempo successivo la deforestazione
 d2c<-unsuperClass(defor2,nClasses=2)
-# in d1c abbiamo la mappa
+# AM: si valuta il valore 'map' e si procede al plottaggio 
 d2c$map
-# facciamo il plot
 plot(d2c$map)
-
+# AM: vengono cambiati i colori di rappresentazione nel plot
 cl1<-colorRampPalette(c('green','blue'))(100)
 plot(d2c$map,col=cl1)
 
-# mettiamo a confronte le due immagini
+# AM: una volta completata la classificazione per i due momenti relativi alla deforestazione si procede con un multiframe per un confronto
+# AM: multiframe due righe e una colonna
 par(mfrow=c(2,1))
 plot(d1c$map,col=cl1)
 plot(d2c$map,col=cl1)
-
+# AM: multiframe due colonne e una riga
 par(mfrow=c(1,2))
 plot(d1c$map, col=cl1)
 plot(d2c$map, col=cl1)
@@ -1094,53 +1110,55 @@ plot(d2c$map, col=cl1)
 dev.off()
 
 ###########
-# classificazione con tre classi l'immagine satellitare defor2
-# consideriamo adesso la seconda immagine
-d2c<-unsuperClass(defor2,nClasses=3)
-# in d1c abbiamo la mappa
-d2c$map
-# facciamo il plot
-plot(d2c$map)
+# AM: prova di classificazione con tre classi dell'immagine satellitare defor2
+d2c3<-unsuperClass(defor2,nClasses=3)
+d2c3$map
+plot(d2c3$map)
 cl3<-colorRampPalette(c('orange','green','blue'))(100)
-plot(d2c$map,col=cl3)
+plot(d2c3$map,col=cl3)
+# AM: confronto con multiframe tra la classificazione di defor2 con 2 e 3 classi
+par(mfrow=c(1,2))
+plot(d2c$map, col=cl1)
+plot(d2c3$map,col=cl3)
+
+dev.off()
 ###########
 
+# AM: si prcede con il generare delle frequenze da una variabile con percentuali e opzioni di formattazione
 freq(d1c$map)
-# quatificare la quantità di foresta che è stata persa
-# area aperta = 306059
-# foresta = 35233
+# AM: viene quantificata la quantità di foresta che è stata persa
+# area aperta = 35233
+# foresta = 306059
 
-# calcoliamo dapprima il totale
-totd1<- 306059 + 35233
+# AM: prima di operare al fine di una percentuale si deve ricavare il totale
+totd1<- 35233 + 306059 
 # totd1 = 341292
 
-# possiamo calcolare la percentuale
+# AM: successivamente si può calcolare la percentuale
 percent1<-freq(d1c$map)*100/totd1
 
-# percentuali
-# foreste = 89.7
-# aree aperte = 10.3
+# AM: percentuali risultanti
+# aree aperte = 10.3 
+# foresta = 89.7
 
 
-# per il defor2
+# AM: si procede allo stesso modo con defor2
 freq(d2c$map)
-# foreste = 179087
-# aree aperte = 163639
+# aree aperte = 178053
+# foresta = 164673
 
-totd2<-179087 + 163639
+totd2<- 178053 + 164673 
 # totd2 = 342726
 
 # percentuale
 percent2<-freq(d2c$map)*100/totd2
+# aree aperte = 51.95
+# foreste =  48.05
 
-# foreste = 52.2
-# aree aperte = 47.8
-
-
-# creare un nuovo dataset con i dati ricavati
+# AM: creare un nuovo dataset con i dati ottenuti
 cover <- c("Agriculture","Forest")
 before<-c(10.3,89.7)
-after<-c(47.8,52.2)
+after<-c(51.95,48.05)
 
 output <- data.frame(cover,before,after)
 View(output)
@@ -1149,10 +1167,10 @@ View(output)
 #### DAY 2 ###
 # riapriamo il file dell'utlima lezione
 setwd("C:/lab")
-load("defor.RData")
+load("C:/lab/defor.RData")
 ls()
 
-# rivediamo le immagini a confronto della foresta prima e dopo il disboscamento
+# AM: ricostruire il multiframe delle due immagini relative a prima e dopo il disboscamento
 library(raster)
 par(mfrow=c(1,2))
 cl1<-colorRampPalette(c('green','blue'))(100)
@@ -1161,38 +1179,41 @@ plot(d2c$map,col=cl1)
 
 dev.off()
 
-# controliamo il dataframe contenete l'agricultura e la foresta prima e dopo il disboscamento
+# AM: controllo del dataframe contenete l'agricultura e la foresta prima e dopo il disboscamento
 output
 
 
-# possiamo quindi fare un plot della percentuale di foresta attuale e precedente
+# AM: si procede a creare un plot della percentuale di foresta attuale e precedente
 
-
-# carichiamo la libreria ggplot2
+# AM: servirà la libreria ggplot2 
+# AM: richiamare tale libreria
 library(ggplot2)
-# plot della percentuale precedente la deforestazione
+# AM: plot della percentuale precedente la deforestazione
 grafico1<-ggplot(output,aes(x=cover,y=before,color=cover))+geom_bar(stat="identity",fill="white")
 grafico1
-# faremo degli istogrammi del dataframe di output
-# aes: sulla x agricoltura e foresta, sulla y la percentuale di copertura prima della deforestazione
-# colore si baserà sulla cover (agricoltura e foresta)
-# stat sono le statistiche che considera, in questo caso le identità
-# fill dà il colore alla copertura
+# AM: verranno fatti istogrammi del dataframe di output
+# AM: sulle ascisse viene rappresentato aes, quindi agricoltura e foresta, sulle ordinate la percentuale di copertura prima della deforestazione
+# AM: il colore si baserà sulla cover (agricoltura e foresta)
+# AM: stat sono le statistiche che considera, in questo caso le identità
+# AM: fill dà il colore alla copertura
 
-## Exercize: plot the histograms of the land cover after deforestation
+# EXERCISE: plot the histograms of the land cover after deforestation
 grafico2<-ggplot(output,aes(x=cover,y=after,color=cover))+geom_bar(stat="identity",fill="white")
 grafico2
 
-# possiamo fare un plot dei due istogrammi per confrontarli
-# dobbiamo però usare un'altra libreria, la gridExtra 
+# AM: si possono confrontare i due istogrammi risultanti, ma c'è bisogno della libreria gridExtra 
+# AM: gridExtra: Funzioni varie per la grafica "Grid"
+# AM: il pacchetto fornisce una serie di funzioni per lavorare con la grafica "griglia", in particolare per organizzare più grafici basati sulla griglia in una sola pagina, e disegnare tabelle.
 install.packages("gridExtra")
 library(gridExtra)
 
-# possiamo quindi procedere a fare un plot con la funzione grid.arrange. La funzione prende vari plot e li mette insieme all'interno di uno stesso grafico (funzione simile a par)
+# AM: si può dunque procedere al confronto con la funzione grid.arrange. 
+# AM: La funzione prende vari plot e li mette insieme all'interno di uno stesso grafico (funzione simile a par)
 grid.arrange(grafico1,grafico2,nrow=1)
-# la percentuale di agricoltura relativa a prima della deforestazione sale vertiginosamente fino a raggiungere quasi il livello della foresta dopo la deforestazione
+# AM: dalla comparazione degli istogrammi emerge che la percentuale relativa alla agricoltura prima della deforestazione sale vertiginosamente fino a raggiungere quasi il livello della foresta dopo la deforestazione
 
-# mettiamo la scala dell'asse delle y da 0 a 100 così i due grafici possono essere confrontati meglio
+# AM: per un contronto migliore si uniformano le scale dei due istogrammi
+# AM: mettiamo la scala dell'asse delle y da 0 a 100 per entrambi gli istogrammi
 grafico1<-ggplot(output,aes(x=cover,y=before,color=cover))+geom_bar(stat="identity",fill="white")+ylim(0,100)
 grafico2<-ggplot(output,aes(x=cover,y=after,color=cover))+geom_bar(stat="identity",fill="white")+ylim(0,100)
 grid.arrange(grafico1,grafico2,nrow=1)
@@ -1207,20 +1228,18 @@ grid.arrange(grafico1,grafico2,nrow=1)
 
 # 8. R code multitemp NO2
 
-# codice per analisi dei dati NO2 da ESA - gennaio a marzo 2020
+# AM: codice per analisi dei dati NO2 da ESA - gennaio a marzo 2020
 
-# useremo le seguenti librerie
+# AM: librerie
 library(raster)
 
-
-
-# settiamo la WD
+# AM: selezionare la WD
 setwd("C:/lab")
-
+ # AM: caricare la prima immagine e successivamente plottarla
 EN01<-raster("EN_0001.png")
 plot(EN01)
 
-# dobbiamo importare le singole immagini con la funzione raster
+# AM: importare le singole immagini con la funzione raster
 EN01<-raster("EN_0001.png")
 EN02<-raster("EN_0002.png")
 EN03<-raster("EN_0003.png")
@@ -1236,20 +1255,18 @@ EN12<-raster("EN_0012.png")
 EN13<-raster("EN_0013.png")
 
 
-# plottiamo la prima immagine e l'ultima, creando una color palette
+# AM: confronto tra la prima e l'ultima immagine, impostando una color palette in un analisi con multiframe
 library(raster)
 cl<-colorRampPalette(c('red','orange','yellow'))(100)
-plot(EN01,col=cl)
-plot(EN13,col=cl)
-
 par(mfrow=c(1,2))
 plot(EN01,col=cl)
 plot(EN13,col=cl)
+
 dev.off()
 
-# difference
+# AM: fare la difference tra l'immagine relativa all'ultima analisi e l'immagine relativa alla prima
 difno2 <- EN13 - EN01
-cldif <- colorRampPalette(c('blue','black','yellow'))(100)
+cldif <- colorRampPalette(c('royalblue','powderblue','black'))(100)
 plot(difno2, col=cldif)
 
 # plottiamo tutte le immagini
@@ -1274,58 +1291,61 @@ dev.off()
 ### DAY 2 ###
 
 setwd("C:/lab")
-load("EN.RData")
+load("C:/lab/EN.RData")
 ls()
 
-# per importare più immagini insieme
+# AM: invece di importare una immagine per volta, si usa una funzione della libreria raster
 library(raster)
-# bisogna creare una cartella contenente tutti le immagini EN e selezionare questa cartella come nuova WD
+# AM: si crea una cartella nella cartella lab. La nuova cartella conterrà tutti le immagini EN 
+# AM: selezionare questa cartella come nuova WD
 setwd("C:/lab/esa_no2")
 
-# creiamo una rlist contenente la lista di file .png
+# AM: creare una lista che seleziona le immagini con pattern=".png"
+# AM: list.files produce un vettore comprendete la lista di file nella directory indicata.
+# AM: impostando il pattern si avranno solo i nomi di file che corrispondono all'espressione regolare.
 rlist<-list.files(pattern=".png")
-rlist #visualiziamo il contenuto del nuovo data creato
+# AM: si studia il contenuto del nuovo vettore
+rlist 
 
-#save raster into list
-# lapply applica una funzione su una lista o un vettore (serie di elementi). 
-# In questo caso la funzione che vogliamo applicare per caricare i singoli dati sono brick (immagine satellitare con tutti i sensori) e raster (immagine con un solo sensore)
-# applichiamo alla listra rlis la funzione raster
+
+# AM: lapply applica una funzione su una lista o un vettore (serie di elementi). 
+# AM: in questo caso la funzione che si vuole applicare per caricare i singoli dati sono brick (immagine satellitare con tutti i sensori) e raster (immagine con un solo sensore)
+# AM: si applica la funzione raster alla lista di file '.png' precedentemente creata
 listafinale<-lapply(rlist, raster)
 
+# visualizzare i RasterLayer 
 listafinale 
-# visualizziamo i RasterLayer 
 
-# funzione stack permette di impacchettare tutte le immagini in una unica
+# AM: invece di fare un multiframe, c'è la possibilità di includere tutte le immagini in una unica
+# AM: la funzione stack permette di impilare più vettori in un singolo vettore 
 EN <- stack(listafinale)
 
+# AM: reimpostazione della color Ramp palette
 cl<-colorRampPalette(c('red','orange','yellow'))(100)
-# possiamo dunque plottare l'immagine
+# AM: si procede dunque con il plottaggio dell'immagine
 plot(EN,col=cl)
 
-
+# AM: riepilogo
 library(raster)
 setwd("C:/lab/esa_no2")
-
 rlist
 listafinale<-lapply(rlist,raster)
 listafinale
 EN<-stack(listafinale)
 
-# una volta caricate le immagini creiamo una differenza tra l'ultima immagine (EN 13 corrispondente a Marzo) e la prima immagine (EN 01 corrispondente a Gennaio) 
+# AM: una volta caricate le immagini si può calcolare la differenza tra l'ultima immagine (EN 13 corrispondente a Marzo) e la prima immagine (EN 01 corrispondente a Gennaio) 
 difEN<- EN$EN_0013-EN$EN_0001
 
-# ci definizamo una colorRampPalette
+# AM: definire una colorRampPalette da inserire nel plottaggio di questa differenza
 cld<-colorRampPalette(c('blue','white','red'))(100)
-
-# e plottiamo la differnza delle immagini con il colore creato così da visualizzare le differenze tra Marzo e Gennaio
 plot(difEN,col=cld)
 
-# boxplot
+# AM: si possono confrontare le varie immagini con la funzione boxplot, che crea un diagramma a riquadri per ogni vettore
+# AM: si impostano
+# AM: la disposizione orizzontale
+# AM: l'assenza delle linee esterne
+# AM: la presenza degli assi (di default axes=T, se si vogliono togliere si mette axes=F)
 boxplot(EN,horizontal=T,outiline=F,axes=T)
-# horizontal=T -> disposizione orizzontale
-# outline=F -> senza linee esterne
-# axes=T di defoult, mette gli assi (il contrario axes=F li toglie)
-
 
 
 
@@ -1336,55 +1356,62 @@ boxplot(EN,horizontal=T,outiline=F,axes=T)
 
 ### 9. R code Snow
 
-# settiamo la WD
+# AM: settare la WD
 setwd("C:/lab")
 
-# istalliamo la libreria 
+# AM: librerie
+library(raster)
+library(ncdf4)
+
+# AM: si installi la libreria ncdf4
+# AM: questa libreria fornisce un'interfaccia R ad alto livello per i file di dati binari che sono portatili tra piattaforme e includono informazioni sui metadati in aggiunta ai set di dati
 install.packages("ncdf4")
-#richiamiamo la libreria appena istallata e la libreria raster
+# AM: mandare la libreria appena istallata e la libreria raster
 library(ncdf4)
 library(raster)
 
-#importiamo con la funzione raster l'immagine scaricata da Copernicus
+# AM: con la funzione raster si importa l'immagine scaricata da Copernicus
 snowmay<-raster("c_gls_SCE500_202005180000_CEURO_MODIS_V1.0.1.nc")
 
-#visualizziamo dunque l'immagne ed essendo neve possiamo fare una ColorRampPalette 
+# AM: visualizzare dunque l'immagne 
+# AM: essendo copertura nevosa, si può impostare una ColorRampPalette che rispecchi i colori relativi
 cl <- colorRampPalette(c('darkblue','blue','light blue'))(100) 
-#e plottiamo l'immagine con il colore 
 plot(snowmay,col=cl)
 
-#settiamo la nuova WD che è la cartella snow
+# AM: settiare la nuova WD che è la cartella snow, contenente le immagini relative alla copertura in più momenti
 setwd("C:/lab/snow")
 
-#importiamo tutti i file
+# AM: si importano tutti i file creando una rlist
 library(raster)
-rlist=list.files(pattern="snow",full.names=T)
+rlist<-list.files(pattern="snow",full.names=T)
 
-#usiamo lapply
-list_rast=lapply(rlist,raster)
+# AM: e successivamente la funzione lapply che applica la funzione raster alla lista 
+list_rast<-lapply(rlist,raster)
+# AM: impilare più vettori in un singolo vettore 
 snow.multitemp<-stack(list_rast)
-#plottiamo le immagini
+# AM: successivamente plottare le immagini
 cl <- colorRampPalette(c('darkblue','blue','light blue'))(100) 
 plot(snow.multitemp, col=cl)
 
-par(mfrowc=(1,2)
+# AM: confronto multiframe tra la prima immagine 'snow2000r' e l'ultima 'snow2020r'
+par(mfrow=c(1,2))
 plot(snow.multitemp$snow2000r,col=cl)
 plot(snow.multitemp$snow2020r,col=cl)
 
-#mettiamo il limite delle assi delle y uguali per entrambe le mappe
+# AM: impostare il limite delle ordinate uguali per entrambe le mappe
 par(mfrow=c(1,2))
 plot(snow.multitemp$snow2000r, col=cl, zlim=c(0,250))
 plot(snow.multitemp$snow2020r, col=cl, zlim=c(0,250))
 
 dev.off()
 
-# vediamo la differenza tra le due mappe
-diffsnow=snow.multitemp$snow2020r - snow.multitemp$snow2000r
-#nuova colorramppalette
+# AM: creazione e plottaggio della differenza tra le due mappe
+diffsnow<-snow.multitemp$snow2020r - snow.multitemp$snow2000r
+# AM: con una nuova color Ramp palette
 cldiff<-colorRampPalette(c('blue','white','red'))(100)
 plot(diffsnow,col=cldiff)
 
-#funzione source ci permette di girare un codice dall'esterno
+# AM: funzione source ci permette di girare un codice dall'esterno
 source("prediction.r")
 
 predicted.snow.2025.norm <- raster("predicted.snow.2025.norm.tif")
@@ -1399,23 +1426,29 @@ plot(predicted.snow.2025.norm,col=cl)
 
 ### 10. R code patches
 
-# Settiamo innanzitutto la WD
+# AM: settare innanzitutto la WD
 setwd("C:/lab")
 
-# richiamiamo la libreria raster
+# AM: librerie
+library(raster)
+library(igraph)
+library(ggplot2)
+
+# AM: richiamare la libreria raster
 library(raster)
 
-# carichiamo le immagini raster, la mappa classificata in questo caso, con la funzione raster
+# AM: caricare le immagini raster, la mappa classificata in questo caso, con la funzione raster
 d1c<-raster("d1c.tif")
 d2c<-raster("d2c.tif")
 
-# facciamo un plot per vedere chi è la foresta e chi è la parte agricola
-# con una colorRampPalette con due colori
+# AM: con un plot si può vedere qual è la foresta e quale la parte agricola
+# AM: impostare una colorRampPalette con due colori
 cl<-colorRampPalette(c('green','black'))(100)
+# AM: multiframe
 par(mfrow=c(1,2))
 plot(d1c,col=cl)
 plot(d2c,col=cl)
-# mappa così sbagliata perchè la foresta corrisponde al colore due anzichè al colore uno, bisogna quindi invertire i colori
+# AM: la mappa risultante è così sbagliata, perchè la foresta corrisponde al colore due anzichè al colore uno, bisogna quindi invertire i colori
 cl<-colorRampPalette(c('black','green'))(100)
 par(mfrow=c(1,2))
 plot(d1c,col=cl)
@@ -1423,73 +1456,80 @@ plot(d2c,col=cl)
 
 dev.off()
 
-# land cover 1= agriculture, land cover 2=forest
+# land cover 1 = agriculture
+# land cover 2 = forest
 
-# funzione per annullare alcuni valori è la funzione cbind
-# vogliamo eliminare tutti i valori corrisponndenti all'agrucoltura e così estraiamo solo i valori della foresta
+# AM: si volgiono eliminare tutti i valori corrispondenti alla agricoltura così da lasciare solo quelli relativi alla foresta
+# AM: funzione per annullare alcuni valori è la funzione cbind che prende i valori 1 corrispondenti alla foresta e ai valori della agricoltura si assegra NA
 # reclassify = riclassifichiamo i dati anullando i valori della classe della agricoltura associandogli il valore NA
 d1c.for <- reclassify(d1c, cbind(1, NA))
 
-# abbiamo quindi una nuova mappa e possiamo rifare il par mettendola a confronto le due situazioni
+# AM: si ha quindi una nuova mappa 
+# AM: si procede con il multiframe per il confronto
 par(mfrow=c(1,2))
 cl <- colorRampPalette(c('black','green'))(100) #
 plot(d1c,col=cl)
 plot(d1c.for)
-# abbiamo reso nullo il valore 1, abbiamo solo la classe delle foreste che ha valore due
-# possiamo applicare la colorRampPalette anche alla senìconsa mappa
+# AM: è stato reso nullo il valore 1, abbiamo solo la classe delle foreste che ha valore due
+# AM: si può impostare la stessa colorRampPalette anche per la seconda mappa
+# AM: multiframe della prima immagine d1c, mettento a confronto la mappa che ha anche i valori della agricoltura, con la mappa senza quei valori
 par(mfrow=c(1,2))
-cl <- colorRampPalette(c('black','green'))(100) #
+cl <- colorRampPalette(c('black','green'))(100)
 plot(d1c,col=cl)
 plot(d1c.for,col=cl)
 
-# abbiamo riclassificato quindi la prima mappa e possiamo procedere per la seconda
-# teniamo solo le foreste
+
+# AM: si procede in egual modo per la seconda immagine d2c 
+# AM: solo le foreste
 d2c.for<-reclassify(d2c,cbind(1,NA))
 
-# possiamo fare un plot di entrambe le mappe classificate solo con la foresta
+# AM: plot di entrambe le mappe classificate solo con la foresta
 par(mfrow=c(1,2))
 plot(d1c)
 plot(d2c)
 
-# scarichaimo il pacchetto igraph che dovrebbe essere incluso in raster
+
+# AM: per la creazione di patches c'è bisogno del pacchetto igraph che dovrebbe già essere incluso in raster
 install.packages("igraph")
 library(igraph)
 
-# creiamo patches, uniamo e raggruppiamo tutti i pixel vicino per creare ogni patch
+# AM: creare patches, unendo e raggruppando tutti i pixel vicino per creare ogni patch
 d1c.for.patches<-clump(d1c.for)
 d2c.for.patches<-clump(d2c.for)
 
-# abbiamo creato le nostre mappe con i patches
-# con la funzione writerRster esportiamo il file delle due mappe in formato ".tif" direttamente all'interno della cartella lab
+# AM: una volta create le mappe con i patches
+# AM: con la funzione writerRster si esportano il file delle due mappe in formato ".tif" direttamente all'interno della cartella lab
 writeRaster(d1c.for.patches,"d1c.for.patches.tif")
 writeRaster(d2c.for.patches,"d2c.for.patches.tif")
 
-# raster (o brick) importa i file, writeRaster esporta i file
+# AM: raster (o brick) importa i file
+# AM: writeRaster esporta i file
 
-# Exercize: plottare entrambe le mappe una accanto all'altra
+# EXERCISE: plottare entrambe le mappe una accanto all'altra
 par(mfrow=c(1,2))
-clp <- colorRampPalette(c('darkblue','blue','green','orange','yellow','red'))(100) # mettiamo quanti più colori possibili per vedere tutti i singoli patch di foresta
+# AM: impostare una color Ramp palette con quanti più coloro si riescono così sarà più facile visualizzare i singoli patch della foresta
+clp <- colorRampPalette(c('darkblue','blue','green','orange','yellow','red'))(100) 
 plot(d1c.for.patches,col=clp)
 plot(d2c.for.patches,col=clp)
 
-# qauntifichiamo il numero di patches che sono stati creati nelle mappe
+# AM: quantificare il numero di patches che sono stati creati nelle mappe
 d1c.for.patches 
-# vediamo che nel valore patches max erano 301
+# AM: il valore massimo corrisponde a 301 nella prima immagine d1c
 
 d2c.for.patches
-# vediamo che nel valore patches max erano 1212
+# AM: il valore massimo corrisponde a 1212 nella immagine d2c
 
-
-# risultati dei plot
-# time riferito a prima della deforestazione e dopo
+# AM: risultati dei plot in un nuovo dataframe
+# AM: creare time che comprende i dati prima della deforestazione e dopo
+# AM: e npatches che definisce il numero di patches
 time <- c("Before deforestation","After deforestation")
 npatches <- c(301,1212)
 
-# creiamo il dataframe 'output'
+# AM: creare il dataframe 'output'
 output <- data.frame(time,npatches)
 
-# facciamo il plot finale con ggplot
-# richiamiamo la libreria ggplot2
+# AM: plottaggio finale con ggplot
+# AM: richiamare la libreria ggplot2
 library(ggplot2)
 ggplot(output, aes(x=time, y=npatches, color="red")) + geom_bar(stat="identity", fill="white")
 
@@ -1504,72 +1544,74 @@ ggplot(output, aes(x=time, y=npatches, color="red")) + geom_bar(stat="identity",
 ### 11. R_code_crop.r
     
     
-# settiamo la WD
-# facciamo un crop sui dati di neve già usati in precedenza
-# cartella snow come WD
+# AM: selezionare la WD
+# AM: procedere nel fare un crop sui dati di neve già usati in precedenza
+# AM: selezionare quindi la cartella snow come WD
 setwd("C:/lab/snow")
 
-# caricheremo dati da copernicus o qualsiasi dato di immagine satellitare
+# AM: verranno caricati dati da copernicus o qualsiasi dato di immagine satellitare
 
-# Exercize: caricare tutte le immagini della cartella snow
+# EXERCISE: caricare tutte le immagini della cartella snow
 library(raster)
 rlist<-list.files(pattern="snow")
 
-# la lista dei songoli file può essere importata con la funzione raster
+# AM: la lista dei songoli file può essere importata con la funzione raster
 list.rast<-lapply(rlist, raster)
 list.rast
 
-# funzione stack permette di impacchettare tutte le immagini in una unica
+# AM: funzione stack permette di impacchettare tutte le immagini in una unica
 snow.multitemp <- stack(list.rast)
 
 clb<-colorRampPalette(c('dark blue','blue','light blue'))(100)
-# possiamo dunque plottare l'immagine
+# AM: impostata la color Ramp palette si può plottare l'immagine
 plot(snow.multitemp,col=clb)
 
-# vediamo
+# AM: analisi delle immagini multitemporali
 snow.multitemp
 
+# AM: plot relativo all'immagine multitemporale del 2010
 plot(snow.multitemp$snow2010r, col=clb)
-# notiamo che l'Italia si trova tra i 6 e i 20 gradi, e i 35 e i 50
-# quindi impostiamo la nuova estenzione, per chiudere e oommare quindi l'Italia
+# AM: si noti che l'Italia si trova tra i 6 e i 20 gradi, e i 35 e i 50
+# AM: si imposta la nuova estensione, per circoscrivere e zoommare l'Italia
 extension <- c(6, 20, 35, 50)
 zoom(snow.multitemp$snow2010r,ext=extension)
 
-# se vogliamo fare uno zoom con la stessa ColorRampPalette usata per l'analisi basta aggiungere, in questo caso, col=clb
+# AM: se si vuole fare uno zoom con la stessa ColorRampPalette usata per l'analisi basta aggiungere, in questo caso, col=clb
 zoom(snow.multitemp$snow2010r,ext=extension,col=clb)
 
-# rilanciamo il plot dell'immagine originale
+# AM: riplottare l'immagine originale
 plot(snow.multitemp$snow2010r, col=clb)
 
-# possiamo definire l'estenzione tramite un disegno
+# AM: è possibile anche definire l'estensione tramite un disegno
 zoom(snow.multitemp$snow2010r, ext=drawExtent())
 
 # funzoone crop
-# ritaglia una nuova immagne della zona definita
+# AM: la funzione crop permette di ritagliare una nuova immagne della zona definita
 extension <- c(6, 20, 35, 50)
-snow2010r.italy <- crop(snow.multitemp$snow2010r, extension)
+snow2010r.italy <- crop(snow.multitemp$snow2010r,extension)
 plot(snow2010r.italy, col=clb)
 
-# in zoom dobbiamo specificare l'estenzione
-# in crop basta mettere l'immagine e l'estenzione che vgliamo utilizzare per la nuova immagine
+# AM: in zoom dobbiamo specificare l'estenzione
+# AM: in crop basta mettere l'immagine e l'estenzione che vgliamo utilizzare per la nuova immagine
 
-# possiamo applicare la funzione crop su tanti livelli con la funzione brick
-# Esercizio, crop dell'estenzione dell'Italia dello stacj di tutto le immagini della copertura
+# AM: si può applicare la funzione crop su tanti livelli con la funzione brick
+
+# EXERCISE: crop dell'estenzione dell'Italia dello stacj di tutto le immagini della copertura
 extension <- c(6, 20, 35, 50)
 snow.multitemp.Italy<-crop(snow.multitemp,extension)
 plot(snow.multitemp.Italy,col=clb)
 
-# mettiamo la legenda uguale per tutti considerando il mimino e il massimo
+# AM: impostare la legenda uguale per tutti considerando il mimino e il massimo
 snow.multitemp.Italy
 # minimo 20
 # massimo 200
-# aggiungimao il limite zlim=c(20,200)
+# aggiungere il limite zlim=c(20,200)
 plot(snow.multitemp.italy, col=clb, zlim=c(20,200))
 
 
-# facciamo un'analisi con boxplot
+# AM: procedere con un'analisi con boxplot
 boxplot(snow.multitemp.italy, horizontal=T,outline=F)
-# come variano le immagini nel tempo, attraverso una stima quantitativa della copertura nevosa in più o in meno
+
     
     
 ##################################################
