@@ -1,0 +1,98 @@
+# 14. R_code_Species_Distribution_modeling
+# Species Distribution Modeling
+
+# AM: librerie
+library(sdm)
+library(raster)
+library(rgdal)
+
+# AM: per il seguente lavoro non c'è bisogno di selezionare una WD perchè si lavorerà con i dati presenti nel pacchetto sdm
+# AM: lavorare con il pacchetto sdm
+# AM: installare e richiamare tale pacchetto
+install.packages(sdm)
+library(sdm)
+
+# AM: caricare il file all'interno del pacchetto
+# AM: nel pacchetto sdm si trova il file che verrà usato e biosgna caricarlo con la funzione system.file
+file <- system.file("external/species.shp", package="sdm")
+
+# AM: richiamare la libreria raster per usare la funzione shapefile
+library(raster)
+species <- shapefile(file)
+
+# AM: si esamina il dataset
+species
+# AM: si controllano i valori della colonna occurrence
+species$Occurrence
+# AM: ogni punto è relazionato al fatto se la specie è stata vista o meno
+# AM: occurrence ha valori 0 (assente) e 1 (presente)
+
+# AM: plottiamo il dataframe species
+plot(species)
+# AM: nel plot sono visibili sia le presenze che le assenze 
+# AM: quindi si procede con il modificare il comando in modo da diversificare le assenze dalle presenze
+# AM: in blu le presenze
+# AM: in rosso le assenze
+plot(species[species$Occurrence==1,],col='blue',pch=16)
+points(species[species$Occurrence==0,],col='red',pch=16)
+
+# AM: individuare dove sono le variabili ambientali disponibili
+# AM: all'interno del pacchetto sdm si torva la certella external
+path <- system.file("external",package="sdm")
+# AM: importare i file predittori per prevedere quale sarà la distribuzione nello spazio in base anche alle variabili ambientali
+lst <- list.files(path=path,pattern='asc$',full.names = T) 
+
+# AM: con la funzione stack si procederà nel fare un unico oggetto della lista lst delle variabili
+preds <- stack(lst)
+# AM: scegliere una color Ramp Palette
+cl<-colorRampPalette(c('light green','dark blue','pink'))(100)
+plot(preds,col=cl)
+
+# AM: plot dell'elevation
+plot(preds$elevation,col=cl)
+# AM: aggiungere i punti in cui la specie è presente
+points(species[species$Occurrence==1,], pch=16)
+# AM: conclusione-> la specie adora la bassa elevation
+
+# AM: considerare le termperature
+plot(preds$temperature, col=cl)
+# AM: aggiungere i punti in cui la specie è presente
+points(species[species$Occurrence==1,],pch=16,cex=0.8)
+# AM: conclusione-> temperature preferite sono quelle medio alte
+
+# AM esaminiamo la precipitation
+plot(preds$precipitation, col=cl)
+# AM: aggiungere i punti in cui la specie è presente
+points(species[species$Occurrence==1,],pch=16,cex=0.8)
+# AM: conclusione-> non si hanno valori di massimo e minimo ma è nella media
+
+# AM esaminiamo la vegetation
+plot(preds$vegetation, col=cl)
+# AM: aggiungere i punti in cui la specie è presente
+points(species[species$Occurrence==1,],pch=16,cex=0.8)
+# AM: conclusione-> la specie preferisce una zona ombreggiata
+
+# AM: bassa elevation
+# AM: alta temperatura
+# AM: piogge normali, nè precipitazioni elevate, nè situazioni di siccità
+# AM: coperta dalla vegetazione
+
+# AM: Generalized Linear Model (glm)
+# AM: modello lineare generalizzato
+
+d<-sdmData(train=species,predictors=preds)
+d
+
+# AM: y sono le occurrence
+# AM: x z w u sono i predittori
+# AM: la tilde corrisponde all' uguale
+# AM: data= per specificare il dataset 
+# AM: argomento da utilizzare è methods. Il metodo da usare è il glm
+m1<-sdm(Occurrence~elevation+precipitation+temperature+vegetation, data=d,methods='glm')
+
+# AM: previsione
+# AM: creare mappa predittiva della distribuzione della specie sulla base delle quattro variabili
+p1<-predict(m1,newdata=preds)
+plot(p1,col=cl)
+points(species[species$Occurrence== 1,], pch=16,cex=0.8)
+
