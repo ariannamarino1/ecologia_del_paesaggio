@@ -11,6 +11,8 @@
 # 9. R_code_snow.r   
 # 10. R_code_patches.r   
 # 11. R_code_crop.r
+# 12. R_code_Species_Distribution_modeling
+# 13. R_code_Exam
 
 # Dati Copernicus: https://land.copernicus.vgt.vito.be/PDF/portal/Application.html
 
@@ -1721,8 +1723,9 @@ points(species[species$Occurrence== 1,], pch=16,cex=0.8)
 ##################################################
 ##################################################
 
-# EXAM
+# R_code_Exam
 
+# CODICE ESAME 
 
 
 
