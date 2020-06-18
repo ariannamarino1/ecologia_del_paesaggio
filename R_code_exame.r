@@ -36,7 +36,7 @@ library(sp)
 #AM require(sp) è un altro comando per far partire le librerie
 
 # AM: con data vengono richiamati i dati contenuti e disponibili nella libreria
-# AM: "meuse" è un set di dati sulle posizioni e concentrazioni di metalli pesanti nel terreno, con una serie di variabili del suolo e del paesaggio nei punti di psservazione, raccolte nel fiume Mose in un paese del Lussemburgo.
+# AM: "meuse" è un set di dati sulle posizioni e concentrazioni di metalli pesanti nel terreno, con una serie di variabili del suolo e del paesaggio nei punti di osservazione, raccolte nel fiume Mose in un paese del Lussemburgo.
 data(meuse)
 # AM: per visualizzare i dati contenuti in meuse basta mandare il comando
 meuse 
@@ -78,7 +78,7 @@ plot(cadmium,copper)
 # AM: in un grafico è possibile modificare il colore e/o il simbolo, è possibile mettere un titolo al grafico, titolare le ascisse e le ordinate
 # AM: pch=n , dove 'n' rappresenta un numero intero, da 1 a 25. Ad ogni numero corrisponde un simbolo
 # AM: col="colore" , dove 'colore' deve essere sostituito dal nome inglese del colore che si vuole utilizzare. In alternativa al nome del colore si può usare un numero [1;657].
-# AM: main="..." è il comand usato per dare il titolo al grafico.
+# AM: main="..." è il comando usato per dare il titolo al grafico.
 plot(cadmium,copper,pch=17,col="green",main="Primo plot",xlab="cadmio",ylab="copper")
 
 # AM: quando si vogliono prendere dei dati relativi a determinate righe si può usare la [..:..]. 
@@ -91,7 +91,7 @@ pairs(meuse[,3:6],col="blue")
 # AM: cambio simbolo pch=18 (18= rombo)
 pairs(meuse[,3:6],col="blue",pch=18)
 
-# AM: se si vuole ridimensionare la grandezza del punti nel grafico si usa cex=n, dove 'n' viene sostituito con il numero
+# AM: se si vuole ridimensionare la grandezza dei punti nel grafico si usa cex=n, dove 'n' viene sostituito con il numero
 pairs(meuse[,3:6],col="blue",pch=18,cex=0.5)
 
 # AM: titolare il grafico con main="..."
@@ -136,7 +136,7 @@ panel.histograms <- function(x, ...)
 
 # AM: una volta inviate le tre funzioni esterne si avrà la possibilità di diversificare i grafici all'interno dello stesso grafico a rappresentanza di situazioni diverse
 # AM: lower.panel si riferisce ai pannelli al di sotto dei pannelli diagonali
-# AM: upper.panel si riferisce ai pannelli al di dopra dei pannelli diagonali
+# AM: upper.panel si riferisce ai pannelli al di sopra dei pannelli diagonali
 # AM: diag.panel si riferisce ai pannelli diagonali
 pairs(meuse[,3:6],lower.panel=panel.correlations,upper.panel=panel.smoothing,diag.panel=panel.histograms)
 
@@ -185,7 +185,7 @@ plot(cadmium,lead,col="blue",pch=19,cex=2)
 
 
 # AM: è possibile mostrare più grafici in una sola finestra con multiframe o multipanel, specificando il numero di righe e di colonne
-# AM: par(mfrow) è la funzione che mermette di gestire l'aspetto dei grafici, per creare un semplice diagramma a più riquadri
+# AM: par(mfrow) è la funzione che permette di gestire l'aspetto dei grafici, per creare un semplice diagramma a più riquadri
 # AM: mfrow=c(1,2) indica che creiamo una finestra con una riga e due colonne
 par(mfrow=c(1,2))
 plot(cadmium,lead,main="Relazione cadmio e piombo",col="blue",pch=19,cex=2,xlab="Cadmio",ylab="Piombo")
@@ -198,7 +198,7 @@ plot(copper,zinc,main="Relazione tra Rame e Zinco",col="green",pch=17,cex=2,xlab
 
 
 # AM: multiframe automatico
-# AM: installare il pacchetto "Ggally". (Bisogna prestare attenzione alla scrittura con le lettere maiuscore perchè R è case sensitive). Queso pacchetto estende 'ggplot2' aggiungendo diverse funzioni per ridurre la complessità della combinazione di oggetti geometrici con dati trasformato.
+# AM: installare il pacchetto "Ggally". (Bisogna prestare attenzione alla scrittura con le lettere maiuscole perché R è case sensitive). Questo pacchetto estende 'ggplot2' aggiungendo diverse funzioni per ridurre la complessità della combinazione di oggetti geometrici con dati trasformato.
 install.packages("GGally")
 library(GGally)
 
@@ -296,7 +296,7 @@ covid<-read.table("covid_agg.csv",head=TRUE)
 ##################################################
 
 
-### 4. R codde point patterns
+### 4. R code point patterns
 
 
 # Codice per analisi dei point patterns (pattern legati ai punti)
@@ -315,7 +315,7 @@ covid<-read.table("covid_agg.csv",header=TRUE)
 # AM: per vedere la tabella si usa head() 
 head(covid)
 
-# AM: creare un grafico per visualizzare i dati delli paesi in relazione ai dati dei casi
+# AM: creare un grafico per visualizzare i dati dei paesi in relazione ai dati dei casi
 plot(covid$country,covid$cases)
 
 # AM: metodo alternativo tramite fissazione del dataset
@@ -352,7 +352,7 @@ data(mpg)
 head(mpg)
 
 # AM: creare un plot del nuovo dataset mpg, modificare l'estetica (aes) e il tipo di geometria (geom_)
-# AM: aes() è una funzione di quotazione. Ciò signiica che i suoi imput sono quotati per essere valutati nel contesto dei dati.
+# AM: aes() è una funzione di quotazione. Ciò significa che i suoi input sono quotati per essere valutati nel contesto dei dati.
 
 # AM: per visualizzare dei punti si usa geom_point 
 ggplot(mpg,aes(x=displ,y=hwy))+geom_point()
@@ -364,12 +364,12 @@ ggplot(mpg,aes(x=displ,y=hwy))+geom_line()
 ggplot(mpg,aes(x=displ,y=hwy))+geom_polygon()
 
 
-# AM: si applica la libreria ggplot2 ai dati relativi al covid e si ottine un grafco gg plot
+# AM: si applica la libreria ggplot2 ai dati relativi al covid e si ottiene un grafico gg plot
 ggplot(covid,aes(x=lon,y=lat,size=cases))+geom_point()
 
 
 # AM: installare e richiamare la libreria spatstat
-# AM: la libreria 'spatstat' mostra anlisi dei modelli dei punti spaziali, modellazione, simulazione e test. Contiene oltre 2000 funzioni per tracciare i dati spaziali, analisi esplorativa dei dati, modellazione, simulazione, campionamento spaziale, diagnostica dei modelli e inferenza formale.
+# AM: la libreria 'spatstat' mostra analisi dei modelli dei punti spaziali, modellazione, simulazione e test. Contiene oltre 2000 funzioni per tracciare i dati spaziali, analisi esplorativa dei dati, modellazione, simulazione, campionamento spaziale, diagnostica dei modelli e inferenza formale.
 install.packages(spatstat)
 library(spatstat)
 attach(covid)
@@ -381,7 +381,7 @@ covids<-ppp(lon,lat,c(-180,180),c(-90,90))
 # AM: calcolare la densità con il comando density()
 d<-density(covids)
 
-# AM: una volta assegnato un nome alla dentità (d), si può procedere alla sua rappresentazione grafica
+# AM: una volta assegnato un nome alla densità (d), si può procedere alla sua rappresentazione grafica
 plot(d)
 
 # AM: aggiungere i punti del dataset covids al grafico
@@ -399,7 +399,7 @@ ls()
 # AM: rimandare il grafico della densità relativa ai dati del covid
 plot(d)
 
-# AM: plottare la stessa immagine della denistà con la libreria spatstat
+# AM: plottare la stessa immagine della densità con la libreria spatstat
 # AM: richiamare quindi la libreria
 library(spatstat)
 # AM: si può cambiare la palette di colori da usare nel grafico e il numero di intervalli con il comando colorRampPalette
@@ -458,7 +458,7 @@ plot(coastlines, add=T)
 # INTERPOLATION
 
 
-# EXERCISE: usiamo il vecchio sript sul covid e andiamo a plottare la mappa di densità;
+# EXERCISE: usiamo il vecchio script sul covid e andiamo a plottare la mappa di densità;
 # AM: si carica lo script relativo ai dati del covid 
 setwd("C:/lab")
 load("C:/lab/point_pattern.RData")
@@ -579,7 +579,7 @@ colors()
 
 setwd("C:/lab")
 load("C:/lab/sanmarino.RData")
-# visualiziamo i dati 
+# si visualizzano i dati 
 ls()
 
 # AM: dT è la density map
@@ -612,9 +612,9 @@ interpol<-Smooth(Tesippp)
 # AM: plottare la interpol
 plot(interpol)
 points(Tesippp,col="blue")
-# AM: dal plot risualtante si può dedurre che si ha una maggiore ricchezza di dati nella parte Sud-Est e nella parte centrale del territorio di analisi
+# AM: dal plot risultantante si può dedurre che si ha una maggiore ricchezza di dati nella parte Sud-Est e nella parte centrale del territorio di analisi
 
-# AM: si prodegue metendo i confini del territorio di San Marino, caricando l'immagine vettoriale con la libreria rgdal
+# AM: si prosegue mettendo i confini del territorio di San Marino, caricando l'immagine vettoriale con la libreria rgdal
 setwd("C:/lab")
 # AM: libreria per utilizzare qualsiasi tipo di file vettoriale
 library(rgdal)
@@ -668,9 +668,9 @@ library(raster)
 library(RStoolbox)
 
 # AM: installare le librerie che serviranno per lavorare con i dati
-# AM: pacchetto raster per la lettura, la scrittura, la manipolazone, l'analisi e la modellizzazione di dati spaziali gridded
+# AM: pacchetto raster per la lettura, la scrittura, la manipolazione, l'analisi e la modellizzazione di dati spaziali gridded
 install.packages("raster")
-# AM: pacchetto R Stool box per l'analisi dei dati mediante il telerilevamento, come il calcolo di indici spettrali, la trasformazione dei componeneti principali, la classificazione non supervisionata e supervisionata o l'analisi di coperture frazionate. 
+# AM: pacchetto R Stool box per l'analisi dei dati mediante il telerilevamento, come il calcolo di indici spettrali, la trasformazione dei componenti principali, la classificazione non supervisionata e supervisionata o l'analisi di coperture frazionate. 
 install.packages("RStoolbox")
 
 # AM: selezionare la WD. Lavorare con i dati all'interno della cartella p224r63 che sono relativi all'anno 1988 e all'anno 2011
@@ -682,7 +682,7 @@ library(raster)
 # AM: la funzione brick crea un oggetto RasterBrick, ovvero un oggetto multistrato. Sono in genere creati da un file multi-layer (banda)
 p224r63_2011 <- brick("p224r63_2011_masked.grd")
 
-# AM: una volta creto l'oggetto RasterBrick, lo si può plottare
+# AM: una volta creato l'oggetto RasterBrick, lo si può plottare
 plot(p224r63_2011)
 
 # AM: risualtano 7 plot diversi, corrispondenti a 7 bande diverse:
@@ -712,7 +712,7 @@ cl <- colorRampPalette(c("black","grey","light grey"))(100)
 # AM: e lo si aggiunge al comando del grafico
 plot(p224r63_2011,col=cl)
 
-# AM: modifica delle scale cormatiche. Non più 100 intervalli ma 5
+# AM: modifica delle scale cromatiche. Non più 100 intervalli ma 5
 cllow <- colorRampPalette(c("black","grey","light grey"))(5) 
 # AM: scala cromatica diversificata nel grafico
 plot(p224r63_2011,col=cllow)
@@ -733,7 +733,7 @@ names(p224r63_2011)
 
 # AM: cambiare la banda blu (banda 1) con una color palette in scala di blu
 clb <- colorRampPalette(c("dark blue","blue","light blue"))(100)
-# AM: la funzione attach  relativa al fissaggio di un data frame non funziona con il pacchetto raster ma si deve usare $ 
+# AM: la funzione attach relativa al fissaggio di un data frame non funziona con il pacchetto raster ma si deve usare $ 
 # AM: con la nuova palette si visualizza solo la banda del blu all'interno del grafico
 plot(p224r63_2011$B1_sre,col=clb)
 
@@ -774,7 +774,7 @@ plotRGB(p224r63_2011,r=3,g=2,b=1)
 # AM: essendo il risultato nero, usiamo la funzione stretch="lin", che permette di aumentare il contrasto dell'immagine
 plotRGB(p224r63_2011,r=3,g=2,b=1, stretch="lin")
 
-# AM: affinchè il grafico risuli più leggible, si aggiunge la banda dell'infrarosso
+# AM: affinché il grafico risulti più leggibile, si aggiunge la banda dell'infrarosso
 plotRGB(p224r63_2011,r=4,g=3,b=2, stretch="lin")
 # AM: le piante sono molto riflettenti e assumono il colore rosso
 # AM: il celeste indica le zone agricole non coltivata
@@ -793,7 +793,7 @@ plotRGB(p224r63_2011,r=4,g=3,b=2, stretch="lin")
 
 dev.off()
 
-# EXERCISE: nir nella compnente R(Red)
+# EXERCISE: nir nella componente R(Red)
 plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
 
 # EXERCISE: infrarosso nella componente green
@@ -829,7 +829,7 @@ p224r63_2011c
 # AM: plottando la mappa, specificata con il $, si avranno 4 colori a dimostrazione delle quattro classi specificate 
 plot(p224r63_2011c$map)
 
-# AM: impostare una nuova palette che permette una migiore visualizzazione e interpretazione del grafico
+# AM: impostare una nuova palette che permette una migliore visualizzazione e interpretazione del grafico
 clclass <- colorRampPalette(c('green',"red","blue","black"))(100)
 plot(p224r63_2011c$map,col=clclass)
 
@@ -839,7 +839,7 @@ plot(p224r63_2011c$map,col=clclass)
 
 #telerilevamento parte due
 
-#per riuscire ad usare le funzioni di telerilevamnento bisogna usare la libreria raster;
+#per riuscire ad usare le funzioni di telerilevamento bisogna usare la libreria raster;
 library(raster)
 
 #settiamo la working directory
@@ -873,7 +873,7 @@ plot(p224r63_1988)
 # AM: visualizzare i campi di interesse
 names(p224r63_1988)
 
-# AM: usare il multiframe per visualizzare i grafici della banda del blu (1), del verde (2), del rosso (3) e del vicino all'infrarosso (4) iniseme
+# AM: usare il multiframe per visualizzare i grafici della banda del blu (1), del verde (2), del rosso (3) e del vicino all'infrarosso (4) insieme
 par(mfrow=c(2,2))
 # blue
 clb <- colorRampPalette(c("dark blue","blue","light blue"))(100)
@@ -913,7 +913,7 @@ dev.off()
 # AM: e le zolle di terra sono bianche o celeste
 
 
-# AM: si può calcolare calcolare l'indice di salute della vegetazione
+# AM: si può calcolare l'indice di salute della vegetazione
 # AM: ricordare che calcolare tale indice è possibile in quanto le foglie sane riescono a riflettere l'infrarosso 
 # AM: DVI(Difference Vegetation Index) sarà l'indice che useremo noi
 
@@ -946,7 +946,7 @@ plot(dvi2011,col=cldvi11)
 # AM: multitemporal analysis
 dfdvi <- dvi2011-dvi1988
 
-# AM: si crea l'immagine realtiva alle zone dove le piante hanno subito maggiore stress
+# AM: si crea l'immagine relativa alle zone dove le piante hanno subito maggiore stress
 plot(dfdvi)
 cldfdvi <- colorRampPalette(c('red','white','blue'))(100)
 plot(dfdvi,col=cldfdvi)
@@ -959,11 +959,11 @@ plot(dfdvi,col=cldfdvi)
 
 dev.off()
 
-# AM: cambiare la risoluzione di un immagine, la funione che si usa è aggregate che crea un nuovo RasterLayer o RasterBrick con una risoluzione inferiore, quindi celle più grandi
+# AM: cambiare la risoluzione di un'immagine, la funzione che si usa è aggregate che crea un nuovo RasterLayer o RasterBrick con una risoluzione inferiore, quindi celle più grandi
 p224r63_2011lr <- aggregate(p224r63_2011,fact=10)
 # AM: se fact o factor viene settato uguale a 10 usiamo una scala 10 volte maggiore 
 
-# AM: caratteriestiche dell'immagine originale
+# AM: caratteristiche dell'immagine originale
 p224r63_2011
 
 # AM: caratteristiche della nuova immagine
@@ -993,7 +993,7 @@ plot(dvi2011lr50)
 
 # AM: cambiare la risoluzione dell'immagine del 1988
 p224r63_1988lr <- aggregate(p224r63_1988,fact=10)
-# AM: caratteriestiche dell'immagine originale
+# AM: caratteristiche dell'immagine originale
 p224r63_1988
 # AM: caratteristiche della nuova immagine
 p224r63_1988lr
@@ -1011,7 +1011,7 @@ dfdvilr50 <- dvi2011lr50-dvi1988lr50
 cldifdvi <- colorRampPalette(c('red','white','blue'))(100)
 plot(dfdvilr50,col=cldfdvi)
 
-# AM: multiframe conforntando i DVI con le diverse risoluzioni 
+# AM: multiframe confrontando i DVI con le diverse risoluzioni 
 par(mfrow=c(2,1))
 plot(dfdvi,col=cldfdvi)
 plot(dfdvilr50,col=cldfdvi)
@@ -1065,7 +1065,7 @@ plotRGB(defor1,r=1,g=2,b=3,stretch="Lin")
 # EXERCISE: plot della seconda data
 plotRGB(defor2,r=1,g=2,b=3,stretch="Lin")
 
-# AM: multiframe per comparare le due immagini, confronto della foreste pluviale in due momenti diversi, prima e dopo la deforestazione
+# AM: multiframe per comparare le due immagini, confronto della foresta pluviale in due momenti diversi, prima e dopo la deforestazione
 par(mfrow=c(2,1))
 plotRGB(defor1,r=1,g=2,b=3,stretch="Lin")
 plotRGB(defor2,r=1,g=2,b=3,stretch="Lin")
@@ -1126,7 +1126,7 @@ plot(d2c3$map,col=cl3)
 dev.off()
 ###########
 
-# AM: si prcede con il generare delle frequenze da una variabile con percentuali e opzioni di formattazione
+# AM: si procede con il generare delle frequenze da una variabile con percentuali e opzioni di formattazione
 freq(d1c$map)
 # AM: viene quantificata la quantità di foresta che è stata persa
 # area aperta = 35233
@@ -1167,7 +1167,7 @@ View(output)
 
 
 #### DAY 2 ###
-# riapriamo il file dell'utlima lezione
+# riapriamo il file dell'ultima lezione
 setwd("C:/lab")
 load("C:/lab/defor.RData")
 ls()
@@ -1181,7 +1181,7 @@ plot(d2c$map,col=cl1)
 
 dev.off()
 
-# AM: controllo del dataframe contenete l'agricultura e la foresta prima e dopo il disboscamento
+# AM: controllo del dataframe contenete l'agricoltura e la foresta prima e dopo il disboscamento
 output
 
 
@@ -1214,7 +1214,7 @@ library(gridExtra)
 grid.arrange(grafico1,grafico2,nrow=1)
 # AM: dalla comparazione degli istogrammi emerge che la percentuale relativa alla agricoltura prima della deforestazione sale vertiginosamente fino a raggiungere quasi il livello della foresta dopo la deforestazione
 
-# AM: per un contronto migliore si uniformano le scale dei due istogrammi
+# AM: per un confronto migliore si uniformano le scale dei due istogrammi
 # AM: mettiamo la scala dell'asse delle y da 0 a 100 per entrambi gli istogrammi
 grafico1<-ggplot(output,aes(x=cover,y=before,color=cover))+geom_bar(stat="identity",fill="white")+ylim(0,100)
 grafico2<-ggplot(output,aes(x=cover,y=after,color=cover))+geom_bar(stat="identity",fill="white")+ylim(0,100)
@@ -1257,7 +1257,7 @@ EN12<-raster("EN_0012.png")
 EN13<-raster("EN_0013.png")
 
 
-# AM: confronto tra la prima e l'ultima immagine, impostando una color palette in un analisi con multiframe
+# AM: confronto tra la prima e l'ultima immagine, impostando una color palette in un'analisi con multiframe
 library(raster)
 cl<-colorRampPalette(c('red','orange','yellow'))(100)
 par(mfrow=c(1,2))
@@ -1375,12 +1375,12 @@ library(raster)
 # AM: con la funzione raster si importa l'immagine scaricata da Copernicus
 snowmay<-raster("c_gls_SCE500_202005180000_CEURO_MODIS_V1.0.1.nc")
 
-# AM: visualizzare dunque l'immagne 
+# AM: visualizzare dunque l'immagine 
 # AM: essendo copertura nevosa, si può impostare una ColorRampPalette che rispecchi i colori relativi
 cl <- colorRampPalette(c('darkblue','blue','light blue'))(100) 
 plot(snowmay,col=cl)
 
-# AM: settiare la nuova WD che è la cartella snow, contenente le immagini relative alla copertura in più momenti
+# AM: settare la nuova WD che è la cartella snow, contenente le immagini relative alla copertura in più momenti
 setwd("C:/lab/snow")
 
 # AM: si importano tutti i file creando una rlist
@@ -1450,7 +1450,7 @@ cl<-colorRampPalette(c('green','black'))(100)
 par(mfrow=c(1,2))
 plot(d1c,col=cl)
 plot(d2c,col=cl)
-# AM: la mappa risultante è così sbagliata, perchè la foresta corrisponde al colore due anzichè al colore uno, bisogna quindi invertire i colori
+# AM: la mappa risultante è così sbagliata, perché la foresta corrisponde al colore due anziché al colore uno, bisogna quindi invertire i colori
 cl<-colorRampPalette(c('black','green'))(100)
 par(mfrow=c(1,2))
 plot(d1c,col=cl)
@@ -1461,9 +1461,9 @@ dev.off()
 # land cover 1 = agriculture
 # land cover 2 = forest
 
-# AM: si volgiono eliminare tutti i valori corrispondenti alla agricoltura così da lasciare solo quelli relativi alla foresta
-# AM: funzione per annullare alcuni valori è la funzione cbind che prende i valori 1 corrispondenti alla foresta e ai valori della agricoltura si assegra NA
-# reclassify = riclassifichiamo i dati anullando i valori della classe della agricoltura associandogli il valore NA
+# AM: si vogliono eliminare tutti i valori corrispondenti alla agricoltura così da lasciare solo quelli relativi alla foresta
+# AM: funzione per annullare alcuni valori è la funzione cbind che prende i valori 1 corrispondenti alla foresta e ai valori della agricoltura si assegnerà NA
+# reclassify = riclassifichiamo i dati annullando i valori della classe della agricoltura associandogli il valore NA
 d1c.for <- reclassify(d1c, cbind(1, NA))
 
 # AM: si ha quindi una nuova mappa 
@@ -1574,7 +1574,7 @@ snow.multitemp
 # AM: plot relativo all'immagine multitemporale del 2010
 plot(snow.multitemp$snow2010r, col=clb)
 # AM: si noti che l'Italia si trova tra i 6 e i 20 gradi, e i 35 e i 50
-# AM: si imposta la nuova estensione, per circoscrivere e zoommare l'Italia
+# AM: si imposta la nuova estensione, per circoscrivere e zoomare l'Italia
 extension <- c(6, 20, 35, 50)
 zoom(snow.multitemp$snow2010r,ext=extension)
 
@@ -1588,17 +1588,17 @@ plot(snow.multitemp$snow2010r, col=clb)
 zoom(snow.multitemp$snow2010r, ext=drawExtent())
 
 # funzoone crop
-# AM: la funzione crop permette di ritagliare una nuova immagne della zona definita
+# AM: la funzione crop permette di ritagliare una nuova immagine della zona definita
 extension <- c(6, 20, 35, 50)
 snow2010r.italy <- crop(snow.multitemp$snow2010r,extension)
 plot(snow2010r.italy, col=clb)
 
-# AM: in zoom dobbiamo specificare l'estenzione
-# AM: in crop basta mettere l'immagine e l'estenzione che vgliamo utilizzare per la nuova immagine
+# AM: in zoom dobbiamo specificare l'estensione
+# AM: in crop basta mettere l'immagine e l'estensione che si vuole utilizzare per la nuova immagine
 
 # AM: si può applicare la funzione crop su tanti livelli con la funzione brick
 
-# EXERCISE: crop dell'estenzione dell'Italia dello stacj di tutto le immagini della copertura
+# EXERCISE: crop dell'estensione dell'Italia dello stack di tutto le immagini della copertura
 extension <- c(6, 20, 35, 50)
 snow.multitemp.Italy<-crop(snow.multitemp,extension)
 plot(snow.multitemp.Italy,col=clb)
@@ -1628,13 +1628,13 @@ library(sdm)
 library(raster)
 library(rgdal)
 
-# AM: per il seguente lavoro non c'è bisogno di selezionare una WD perchè si lavorerà con i dati presenti nel pacchetto sdm
+# AM: per il seguente lavoro non c'è bisogno di selezionare una WD perché si lavorerà con i dati presenti nel pacchetto sdm
 # AM: lavorare con il pacchetto sdm
 # AM: installare e richiamare tale pacchetto
 install.packages(sdm)
 library(sdm)
 
-# AM: nel pacchetto sdm si trova il file che verrà usato e biosgna caricarlo con la funzione system.file
+# AM: nel pacchetto sdm si trova il file che verrà usato e bisogna caricarlo con la funzione system.file
 file <- system.file("external/species.shp", package="sdm")
 
 # AM: richiamare la libreria raster per usare la funzione shapefile
@@ -1695,7 +1695,7 @@ points(species[species$Occurrence==1,],pch=16,cex=0.8)
 
 # AM: bassa elevation
 # AM: alta temperatura
-# AM: piogge normali, nè precipitazioni elevate, nè situazioni di siccità
+# AM: piogge normali, né precipitazioni elevate, né situazioni di siccità
 # AM: coperta dalla vegetazione
 
 # AM: Generalized Linear Model (glm)
