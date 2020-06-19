@@ -1727,6 +1727,12 @@ points(species[species$Occurrence== 1,], pch=16,cex=0.8)
 
 # CODICE ESAME 
 
+# librerie
+library(ncdf4)
+library(raster)
+library(RStoolbox)
+library(gridExtra)
+
 # SEttare la WD e richiamare le librerie
 setwd("C:/lab/ecoesame")
 library(ncdf4)
@@ -1748,6 +1754,27 @@ plot(Aug09,col=cl, zlim=c(0,150),main="Agosto 2009")
 plot(Aug14,col=cl, zlim=c(0,150),main="Agosto 2014")
 plot(Aug19,col=cl, zlim=c(0,150),main="Agosto 2019")
 
+# Analisi Agosto 2019-2004
+DifAug <- Aug19-Aug04
+library(RStoolbox)
+DifAugc <- unsuperClass(DifAug,nClasses = 2)
+clDA<-colorRampPalette(c('light blue','maroon'))(100)
+plot(DifAugc$map,col=clDA,main="Variazione Agosto")
+
+freq(DifAugc$map)
+
+      value     count
+[1,]     1     41734172
+[2,]     2     558363457
+ 
+cover<- c("min","max")
+Agosto<-c(41734172, 558363457)
+outputA<-data.frame(cover,Agosto)
+library(ggplot2)
+Agosto<-ggplot(outputA, aes(x=cover,y=Agosto,color=cover))+geom_bar(stat = "identity",fill="white")
+Agosto
+
+
 # DICEMBRE
 # caricare i dati relativi a dicembre degli anni 2004, 2009, 2014, 2019
 Dic04<-raster("c_gls_DMP_200412310000_GLOBE_VGT_V2.0.1.nc")
@@ -1764,25 +1791,6 @@ plot(Dic09,col=cl, zlim=c(0,150),main="Dicembre 2009")
 plot(Dic14,col=cl, zlim=c(0,150),main="Dicembre 2014")
 plot(Dic19,col=cl, zlim=c(0,150),main="Dicembre 2019")
 
-# Analisi Agosto 2019-2004
-DifAug <- Aug19-Aug04
-library(RStoolbox)
-DifAugc <- unsuperClass(DifAug,nClasses = 2)
-clDA<-colorRampPalette(c('light blue','maroon'))(100)
-plot(DifAugc$map,col=clDA,main="Variazione Agosto")
-
-freq(DifAugc$map)
-
-   value     count
-[1,]     1  41734172
-[2,]     2 558363457
-
-cover<- c(“min”,”max”)
-Agosto<-c(41734172, 558363457)
-outputA<-data.frame(cover,Agosto)
-library(ggplot2)
-Agosto<-ggplot(outputA, aes(x=cover,y=Agosto,color=cover))+geom_bar(stat = "identity",fill="white")
-
 
 # Analisi Dicembre 2019-2004
 DifDic <- Dic19-Dic04
@@ -1792,19 +1800,33 @@ clDA<-colorRampPalette(c('light blue','maroon'))(100)
 plot(DifDicc$map,col=clDA,main="Variazione Dicembre")
 freq(DifDicc $map)
 
-   value     count
-[1,]     1  529959987
-[2,]     2 14373061
+      value     count
+[1,]     1     14373061
+[2,]     2     529959987 
 
 cover<- c("min","max")
-Dicembre<-c(529959987, 14373061)
+Dicembre<-c(14373061,529959987)
 outputD<-data.frame(cover,Dicembre)
 library(ggplot2)
 Dicembre<-ggplot(outputD, aes(x=cover,y=Dicembre,color=cover))+geom_bar(stat = "identity",fill="white")
+Dicembre 
 
-# Confronto  Dicembre-Agosto
+
+cover<- c("Agosto","Dicembre")
+min<-c(41734172,14373061)
+max<-c(558363457,529959987)
+output <- data.frame(cover,min,max)
+View(output)
+library(ggplot2)
+plotmin <- ggplot(output, aes(x=cover,y=min,color=cover))+geom_bar(stat = "identity",fill="white")
+plot(plotmin)
+plotmax <- ggplot(output, aes(x=cover,y=max,color=cover))+geom_bar(stat = "identity",fill="white")
+plot(plotmax)
+
+# e con la libreria grid extra mettiamo a confronto i due grafici
 library(gridExtra)
-grid.arrange(Agosto,Dicembre,nrow=1)
+grid.arrange(plotmin,plotmax,nrow=1)
+
 
 
 # Analisi dell'anno 2004
@@ -1813,7 +1835,7 @@ library(RStoolbox)
 Dif2004c <- unsuperClass(Dif2004,nClasses = 2)
 clDA<-colorRampPalette(c('light blue','maroon'))(100)
 plot(Dif2004c$map,col=clDA,main="Variazione Dicembre-Agosto 2019")
-freq(Dif2004c$map)
+
 
 # Analisi dell'anno 2019
 Dif2019 <- Dic19-Aug19
@@ -1821,26 +1843,44 @@ library(RStoolbox)
 Dif2019c <- unsuperClass(Dif2019,nClasses = 2)
 clDA<-colorRampPalette(c('light blue','maroon'))(100)
 plot(Dif2019c$map,col=clDA,main="Variazione Dicembre-Agosto 2019")
-freq(Dif2019c$map)
 
+
+
+# multiframe 2004 2019
+par(mfrow=c(2,1))
+plot(Dif2004c$map,col=clDA,main="Variazione Dicembre-Agosto 2004")
+plot(Dif2019c$map,col=clDA,main="Variazione Dicembre-Agosto 2019")
+
+
+freq(Dif2004c$map)
+       value     count
+[1,]     1       534087522
+[2,]     2       38629475
+
+
+freq(Dif2019c$map)
+      value      count
+[1,]     1     514072823
+[2,]     2     31164403
 
 # Creare un nuovo dataset in cui vengono messi i valori relativi al 2019 e al 2004
-cover <- c(“2004”,”2019”)
-before <- dati 2004
-after <- dati 2019
-output <- data.frame(cover,before,after)
+cover <- c("2004","2019")
+min<- c(38629475,31164403)
+max <- c(534087522,514072823) 
+
+output <- data.frame(cover,min,max)
 View(output)
 
 # usare la libreria ggplot2 per la rappresentazione grafica dei due grafici di istogrammi
 library(ggplot2)
-p04 <- ggplot(output, aes(x=cover,y=before,color=cover))+geom_bar(stat = "identity",fill="white")
-plot(p04)
-p19 <- ggplot(output, aes(x=cover,y=after,color=cover))+geom_bar(stat = "identity",fill="white")
-plot(p19)
+plotmin <- ggplot(output, aes(x=cover,y=min,color=cover))+geom_bar(stat = "identity",fill="white")
+plot(plotmin)
+plotmax <- ggplot(output, aes(x=cover,y=max,color=cover))+geom_bar(stat = "identity",fill="white")
+plot(plotmax)
 
 # e con la libreria grid extra mettiamo a confronto i due grafici
 library(gridExtra)
-grid.arrange(p04,p19,nrow=1)
+grid.arrange(plotmin,plotmax,nrow=1)
 
 
 
