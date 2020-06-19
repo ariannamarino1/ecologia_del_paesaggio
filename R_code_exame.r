@@ -1727,6 +1727,118 @@ points(species[species$Occurrence== 1,], pch=16,cex=0.8)
 
 # CODICE ESAME 
 
+# SEttare la WD e richiamare le librerie
+setwd("C:/lab/ecoesame")
+library(ncdf4)
+library(raster)
+
+# AGOSTO
+# caricare i dati relativi ad agosto degli anni 2004, 2009, 2014, 2019
+Aug04<-raster("c_gls_DMP_200408200000_GLOBE_VGT_V2.0.1.nc")
+Aug09<-raster("c_gls_DMP_200908200000_GLOBE_VGT_V2.0.1.nc")
+Aug14<-raster("c_gls_DMP-RT6_201408200000_GLOBE_PROBAV_V2.0.1.nc")
+Aug19<-raster("c_gls_DMP-RT6_201908200000_GLOBE_PROBAV_V2.0.1.nc")
+# Selezionare una color Ramp Palette
+cl <- colorRampPalette(c('white','green','yellow','orange','dark red'))(100) 
+# e rappresentare in un grafico multiframe le quatto mappe relative ai dati caricati
+par(mfrow=c(2,2))
+par(mar=c(1,1,1,1))
+plot(Aug04,col=cl, zlim=c(0,150),main="Agosto 2004")
+plot(Aug09,col=cl, zlim=c(0,150),main="Agosto 2009")
+plot(Aug14,col=cl, zlim=c(0,150),main="Agosto 2014")
+plot(Aug19,col=cl, zlim=c(0,150),main="Agosto 2019")
+
+# DICEMBRE
+# caricare i dati relativi a dicembre degli anni 2004, 2009, 2014, 2019
+Dic04<-raster("c_gls_DMP_200412310000_GLOBE_VGT_V2.0.1.nc")
+Dic09<-raster("c_gls_DMP_200912310000_GLOBE_VGT_V2.0.1.nc")
+Dic14<-raster("c_gls_DMP-RT6_201412310000_GLOBE_PROBAV_V2.0.1.nc")
+Dic19<-raster("c_gls_DMP-RT6_201912310000_GLOBE_PROBAV_V2.0.1.nc")
+
+cl <- colorRampPalette(c('white','green','yellow','orange','dark red'))(100) 
+# le quattro mappe in un grafico multiframe
+par(mfrow=c(2,2))
+par(mar=c(1,1,1,1))
+plot(Dic04,col=cl, zlim=c(0,150),main="Dicembre 2004")
+plot(Dic09,col=cl, zlim=c(0,150),main="Dicembre 2009")
+plot(Dic14,col=cl, zlim=c(0,150),main="Dicembre 2014")
+plot(Dic19,col=cl, zlim=c(0,150),main="Dicembre 2019")
+
+# Analisi Agosto 2019-2004
+DifAug <- Aug19-Aug04
+library(RStoolbox)
+DifAugc <- unsuperClass(DifAug,nClasses = 2)
+clDA<-colorRampPalette(c('light blue','maroon'))(100)
+plot(DifAugc$map,col=clDA,main="Variazione Agosto")
+
+freq(DifAugc$map)
+
+   value     count
+[1,]     1  41734172
+[2,]     2 558363457
+
+cover<- c(“min”,”max”)
+Agosto<-c(41734172, 558363457)
+output<-data.frame(cover,Agosto)
+ggplot(output, aes(x=cover,y=Agosto,color=cover))+geom_bar(stat = "identity",fill="white")
+
+
+# Analisi Dicembre 2019-2004
+DifDic <- Dic19-Dic04
+library(RStoolbox)
+DifDicc <- unsuperClass(DifDic,nClasses = 2)
+clDA<-colorRampPalette(c('light blue','maroon'))(100)
+plot(DifDicc$map,col=clDA,main="Variazione Dicembre")
+freq(DifDicc $map)
+
+   value     count
+[1,]     1  529959987
+[2,]     2 14373061
+
+cover<- c("min","max")
+Dicembre<-c(529959987, 14373061)
+output<-data.frame(cover,Dicembre)
+ggplot(output, aes(x=cover,y=Dicembre,color=cover))+geom_bar(stat = "identity",fill="white")
+
+
+# Analisi dell'anno 2019
+Dif2019 <- Dic19-Aug19
+library(RStoolbox)
+Dif2019c <- unsuperClass(Dif2019,nClasses = 2)
+clDA<-colorRampPalette(c('light blue','maroon'))(100)
+plot(Dif2019c$map,col=clDA,main="Variazione Dicembre-Agosto 2019")
+freq(Dif2019c$map)
+totDif2019c <- x1 + x2
+perDif2019c <- freq(Dif2019c$map)*100/ totDif2019c
+
+# Analisi dell'anno 2004
+Dif2004 <- Dic04-Aug04
+library(RStoolbox)
+Dif2004c <- unsuperClass(Dif2004,nClasses = 2)
+clDA<-colorRampPalette(c('light blue','maroon'))(100)
+plot(Dif2004c$map,col=clDA,main="Variazione Dicembre-Agosto 2019")
+freq(Dif2004c$map)
+totDif2004c <- x1 + x2
+perDif2004c <- freq(Dif2004c$map)*100/ totDif2004c
+
+# Creare un nuovo dataset in cui vengono messi i valori relativi al 2019 e al 2004
+cover <- c(“2004”,”2019”)
+before <- dati 2004
+after <- dati 2019
+output <- data.frame(cover,before,after)
+View(output)
+
+# usare la libreria ggplot2 per la rappresentazione grafica dei due grafici di istogrammi
+library(ggplot2)
+p04 <- ggplot(output, aes(x=cover,y=before,color=cover))+geom_bar(stat = "identity",fill="white")
+plot(p04)
+p19 <- ggplot(output, aes(x=cover,y=after,color=cover))+geom_bar(stat = "identity",fill="white")
+plot(p19)
+
+# e con la libreria grid extra mettiamo a confronto i due grafici
+library(gridExtra)
+grid.arrange(p04,p19,nrow=1)
+
 
 
 
