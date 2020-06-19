@@ -1779,8 +1779,9 @@ freq(DifAugc$map)
 
 cover<- c(“min”,”max”)
 Agosto<-c(41734172, 558363457)
-output<-data.frame(cover,Agosto)
-ggplot(output, aes(x=cover,y=Agosto,color=cover))+geom_bar(stat = "identity",fill="white")
+outputA<-data.frame(cover,Agosto)
+library(ggplot2)
+Agosto<-ggplot(outputA, aes(x=cover,y=Agosto,color=cover))+geom_bar(stat = "identity",fill="white")
 
 
 # Analisi Dicembre 2019-2004
@@ -1797,19 +1798,14 @@ freq(DifDicc $map)
 
 cover<- c("min","max")
 Dicembre<-c(529959987, 14373061)
-output<-data.frame(cover,Dicembre)
-ggplot(output, aes(x=cover,y=Dicembre,color=cover))+geom_bar(stat = "identity",fill="white")
+outputD<-data.frame(cover,Dicembre)
+library(ggplot2)
+Dicembre<-ggplot(outputD, aes(x=cover,y=Dicembre,color=cover))+geom_bar(stat = "identity",fill="white")
 
+# Confronto  Dicembre-Agosto
+library(gridExtra)
+grid.arrange(Agosto,Dicembre,nrow=1)
 
-# Analisi dell'anno 2019
-Dif2019 <- Dic19-Aug19
-library(RStoolbox)
-Dif2019c <- unsuperClass(Dif2019,nClasses = 2)
-clDA<-colorRampPalette(c('light blue','maroon'))(100)
-plot(Dif2019c$map,col=clDA,main="Variazione Dicembre-Agosto 2019")
-freq(Dif2019c$map)
-totDif2019c <- x1 + x2
-perDif2019c <- freq(Dif2019c$map)*100/ totDif2019c
 
 # Analisi dell'anno 2004
 Dif2004 <- Dic04-Aug04
@@ -1818,8 +1814,15 @@ Dif2004c <- unsuperClass(Dif2004,nClasses = 2)
 clDA<-colorRampPalette(c('light blue','maroon'))(100)
 plot(Dif2004c$map,col=clDA,main="Variazione Dicembre-Agosto 2019")
 freq(Dif2004c$map)
-totDif2004c <- x1 + x2
-perDif2004c <- freq(Dif2004c$map)*100/ totDif2004c
+
+# Analisi dell'anno 2019
+Dif2019 <- Dic19-Aug19
+library(RStoolbox)
+Dif2019c <- unsuperClass(Dif2019,nClasses = 2)
+clDA<-colorRampPalette(c('light blue','maroon'))(100)
+plot(Dif2019c$map,col=clDA,main="Variazione Dicembre-Agosto 2019")
+freq(Dif2019c$map)
+
 
 # Creare un nuovo dataset in cui vengono messi i valori relativi al 2019 e al 2004
 cover <- c(“2004”,”2019”)
