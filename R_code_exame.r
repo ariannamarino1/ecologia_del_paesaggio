@@ -1754,27 +1754,33 @@ plot(Aug09,col=cl, zlim=c(0,150),main="Agosto 2009")
 plot(Aug14,col=cl, zlim=c(0,150),main="Agosto 2014")
 plot(Aug19,col=cl, zlim=c(0,150),main="Agosto 2019")
 
-# Analisi Agosto 2019-2004
+# ANALISI AGOSTO 2019-2004
+# Calcolo della differenza tra Agosto del 2019 e Agosto del 2004
 DifAug <- Aug19-Aug04
+# Con la libreria RStoolbox si può riclassificare la mappa con un numero di classi predeterminate
 library(RStoolbox)
 DifAugc <- unsuperClass(DifAug,nClasses = 2)
+# Si imposta una nuova color Ramp Palette e si procede al plottaggio della mappa 
 clDA<-colorRampPalette(c('light blue','maroon'))(100)
 plot(DifAugc$map,col=clDA,main="Variazione Agosto")
 
+# Viene calcolata la frequenza
 freq(DifAugc$map)
 
       value     count
 [1,]     1     41734172
 [2,]     2     558363457
  
+# Viene costruito un dataset comprendente i dati relativi al massimo e al minimo della DMP del mese di Agosto
 cover<- c("min","max")
 Agosto<-c(41734172, 558363457)
 outputA<-data.frame(cover,Agosto)
+# Con la libreria ggplot2 i dati vengono rappresentati con degli istogrammi
 library(ggplot2)
 Agosto<-ggplot(outputA, aes(x=cover,y=Agosto,color=cover))+geom_bar(stat = "identity",fill="white")
 Agosto
 
-
+# Si esegue lo stesso codice per i dati del mese di Dicembre
 # DICEMBRE
 # caricare i dati relativi a dicembre degli anni 2004, 2009, 2014, 2019
 Dic04<-raster("c_gls_DMP_200412310000_GLOBE_VGT_V2.0.1.nc")
@@ -1792,31 +1798,41 @@ plot(Dic14,col=cl, zlim=c(0,150),main="Dicembre 2014")
 plot(Dic19,col=cl, zlim=c(0,150),main="Dicembre 2019")
 
 
-# Analisi Dicembre 2019-2004
+# ANALISI DICEMBRE 2019-2004
+# Calcolo della differenza tra Dicembre del 2019 e Dicembre del 2004
 DifDic <- Dic19-Dic04
 library(RStoolbox)
+# Classificazione
 DifDicc <- unsuperClass(DifDic,nClasses = 2)
 clDA<-colorRampPalette(c('light blue','maroon'))(100)
 plot(DifDicc$map,col=clDA,main="Variazione Dicembre")
+
+# Si calcola la frequenza
 freq(DifDicc $map)
 
       value     count
 [1,]     1     14373061
 [2,]     2     529959987 
 
+# Viene creato il dataset
 cover<- c("min","max")
 Dicembre<-c(14373061,529959987)
 outputD<-data.frame(cover,Dicembre)
+
+# E rappresentato con istogrammi
 library(ggplot2)
 Dicembre<-ggplot(outputD, aes(x=cover,y=Dicembre,color=cover))+geom_bar(stat = "identity",fill="white")
 Dicembre 
 
-
+# CONFRONTO TRA LE DIFFERENZE RELATIVE AI MESI DI DICE,BRE E AI MESI DI AGOSTO
+# Si crea il dataset compreso di minimo e massimo dela differenza del 2019-2004 dei mesi di Dicembre e Agosto
 cover<- c("Agosto","Dicembre")
 min<-c(41734172,14373061)
 max<-c(558363457,529959987)
 output <- data.frame(cover,min,max)
 View(output)
+
+# Si nominano i grafici di istogrammi relativi per il successivo confronto
 library(ggplot2)
 plotmin <- ggplot(output, aes(x=cover,y=min,color=cover))+geom_bar(stat = "identity",fill="white")
 plot(plotmin)
@@ -1828,16 +1844,30 @@ library(gridExtra)
 grid.arrange(plotmin,plotmax,nrow=1)
 
 
+# ANALISI DICEMBRE - AGOSTO 2004
+# Visualizzare le mappe di Dic04 e Aug04 in un multiframe
+cl <- colorRampPalette(c('white','green','yellow','orange','dark red'))(100)
+par(mfrow=c(1,2))
+par(mar=c(1,1,1,1))
+plot(Dic04,col=cl,zlim=c(0,150),main="Dicembre 2004")
+plot(Aug04,col=cl,zlim=c(0,150),main="Agosto 2004")
 
-# Analisi dell'anno 2004
+# Differenza e classificazione dell'anno 2004
 Dif2004 <- Dic04-Aug04
 library(RStoolbox)
 Dif2004c <- unsuperClass(Dif2004,nClasses = 2)
 clDA<-colorRampPalette(c('light blue','maroon'))(100)
 plot(Dif2004c$map,col=clDA,main="Variazione Dicembre-Agosto 2019")
 
+# ANALISI DICEMBRE - AGOSTO 2019
+# Visualizzare le mappe di Dic19 e Aug19 in un multiframe
+cl <- colorRampPalette(c('white','green','yellow','orange','dark red'))(100)
+par(mfrow=c(1,2))
+par(mar=c(1,1,1,1))
+plot(Dic19,col=cl,zlim=c(0,150),main="Dicembre 2019")
+plot(Aug19,col=cl,zlim=c(0,150),main="Agosto 2019")
 
-# Analisi dell'anno 2019
+# Differenza e classificazione dell'anno 2019
 Dif2019 <- Dic19-Aug19
 library(RStoolbox)
 Dif2019c <- unsuperClass(Dif2019,nClasses = 2)
@@ -1845,25 +1875,24 @@ clDA<-colorRampPalette(c('light blue','maroon'))(100)
 plot(Dif2019c$map,col=clDA,main="Variazione Dicembre-Agosto 2019")
 
 
-
-# multiframe 2004 2019
+# multiframe delle differenze relative all'anno 2004 e all'anno 2019
 par(mfrow=c(2,1))
 plot(Dif2004c$map,col=clDA,main="Variazione Dicembre-Agosto 2004")
 plot(Dif2019c$map,col=clDA,main="Variazione Dicembre-Agosto 2019")
 
-
+# Calcolo della frequenza del 2004
 freq(Dif2004c$map)
        value     count
 [1,]     1       534087522
 [2,]     2       38629475
 
-
+# Calcolo della frequenza del 2019
 freq(Dif2019c$map)
       value      count
 [1,]     1     514072823
 [2,]     2     31164403
 
-# Creare un nuovo dataset in cui vengono messi i valori relativi al 2019 e al 2004
+# Creare un nuovo dataset in cui vengono messi i valori relativi al minimo e all massimo del 2019 e del 2004
 cover <- c("2004","2019")
 min<- c(38629475,31164403)
 max <- c(534087522,514072823) 
@@ -1883,6 +1912,6 @@ library(gridExtra)
 grid.arrange(plotmin,plotmax,nrow=1)
 
 
-
-
-
+#################################################
+#################################################
+#################################################
